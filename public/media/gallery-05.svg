@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1125" viewBox="0 0 900 1125" role="img">
+  <defs>
+    <radialGradient id="light" cx="78%" cy="18%" r="88%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.34"/>
+      <stop offset="52%" stop-color="#FFFFFF" stop-opacity="0.07"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.18"/>
+    </radialGradient>
+    <linearGradient id="fall" x1="1" y1="0" x2="0.1" y2="1">
+      <stop offset="0%" stop-color="#6F8C88" stop-opacity="0.92"/>
+      <stop offset="100%" stop-color="#6F8C88" stop-opacity="0.34"/>
+    </linearGradient>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="117.0"/>
+    </filter>
+    <filter id="grain" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" seed="59" result="n"/>
+      <feColorMatrix type="saturate" values="0" in="n" result="g"/>
+      <feComponentTransfer in="g" result="gt">
+        <feFuncA type="linear" slope="0.5"/>
+      </feComponentTransfer>
+      <feBlend in="SourceGraphic" in2="gt" mode="overlay"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#grain)">
+    <rect width="900" height="1125" fill="#DDDBD2"/>
+    <rect width="900" height="1125" fill="url(#fall)" opacity="0.55"/>
+    <g filter="url(#soft)">
+      <ellipse cx="432" cy="608" rx="243" ry="311" fill="#6F8C88" opacity="0.85"/>
+      <ellipse cx="534" cy="464" rx="122" ry="106" fill="#FFFFFF" opacity="0.26"/>
+      <ellipse cx="281" cy="763" rx="170" ry="124" fill="#000000" opacity="0.2"/>
+    </g>
+    <rect width="900" height="1125" fill="url(#light)"/>
+  </g>
+</svg>
