@@ -34,6 +34,26 @@ export function GalleryLightbox({ items, index, onClose, onNavigate }: GalleryLi
     if (!open && dialog.open) dialog.close();
   }, [open]);
 
+  /**
+   * Backdrop dismiss.
+   *
+   * Attached natively rather than as a React `onClick` on the <dialog>: as a JSX
+   * prop it reads as making a non-interactive element clickable, which is a real
+   * defect when there is no keyboard equivalent — and here there is one, because
+   * <dialog> answers Escape itself and routes it to onClose. The listener goes on
+   * the element that actually receives backdrop clicks.
+   */
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog || !open) return;
+
+    const onBackdropClick = (event: MouseEvent) => {
+      if (event.target === dialog) onClose();
+    };
+    dialog.addEventListener("click", onBackdropClick);
+    return () => dialog.removeEventListener("click", onBackdropClick);
+  }, [open, onClose]);
+
   // showModal() makes the page inert but does not stop it scrolling behind the
   // dialog, which reads as the lightbox drifting over a moving background.
   useEffect(() => {
@@ -74,9 +94,6 @@ export function GalleryLightbox({ items, index, onClose, onNavigate }: GalleryLi
       className="lightbox on-dark"
       aria-label="نمای بزرگ تصویر"
       onClose={onClose}
-      onClick={(event) => {
-        if (event.target === dialogRef.current) onClose();
-      }}
     >
       {item ? (
         <div className="flex h-full flex-col">
@@ -84,10 +101,13 @@ export function GalleryLightbox({ items, index, onClose, onNavigate }: GalleryLi
             <p className="t-meta">
               {toFa(index! + 1)} از {toFa(items.length)}
             </p>
+            {/* No autoFocus: showModal() already focuses the first focusable
+                descendant, which is this button. The prop was redundant, and
+                autofocus outside a modal is an accessibility problem — keeping
+                it here trains the habit of writing it everywhere. */}
             <button
               type="button"
               onClick={onClose}
-              autoFocus
               className="menu-toggle"
               aria-label="بستن نمای بزرگ"
             >

@@ -59,7 +59,8 @@ const slots = [
 ];
 
 
-const svg = ({ name, w, h, tone, ground, mass, seed }) => {
+/* `name` is destructured off by the caller, not used in the markup. */
+const svg = ({ w, h, tone, ground, mass, seed }) => {
   const [mx, my, msize] = mass;
   const cx = w * mx;
   const cy = h * my;

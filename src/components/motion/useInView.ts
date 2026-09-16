@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useMediaQuery, useSupportsIntersectionObserver } from "@/lib/useMediaQuery";
 
 interface Options {
   /** Fraction of the element that must be visible before it counts. */
@@ -16,6 +17,12 @@ interface Options {
  * The single scroll primitive in this project. Everything that responds to
  * scroll — reveals, image settles, the ambient shade — goes through here, so
  * there is exactly one observer implementation to reason about.
+ *
+ * Anyone who asked for less motion, or whose browser cannot observe, gets the
+ * finished state rather than an empty page. That is derived rather than set
+ * from an effect, which means it is right on the first render and stays right
+ * if the reader changes the preference while the page is open — no observer is
+ * created at all in that case.
  */
 export function useInView<T extends HTMLElement>({
   threshold = 0.18,
@@ -23,27 +30,24 @@ export function useInView<T extends HTMLElement>({
   once = true,
 }: Options = {}) {
   const ref = useRef<T>(null);
-  const [inView, setInView] = useState(false);
+  const [seen, setSeen] = useState(false);
+
+  const reduced = useMediaQuery("(prefers-reduced-motion: reduce)");
+  const canObserve = useSupportsIntersectionObserver();
+  const alwaysVisible = reduced || !canObserve;
 
   useEffect(() => {
+    if (alwaysVisible) return;
     const node = ref.current;
     if (!node) return;
-
-    // Anyone who asked for less motion, or whose browser cannot observe, gets
-    // the finished state immediately rather than an empty page.
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduced || typeof IntersectionObserver === "undefined") {
-      setInView(true);
-      return;
-    }
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setInView(true);
+          setSeen(true);
           if (once) observer.disconnect();
         } else if (!once) {
-          setInView(false);
+          setSeen(false);
         }
       },
       { threshold, rootMargin },
@@ -51,7 +55,7 @@ export function useInView<T extends HTMLElement>({
 
     observer.observe(node);
     return () => observer.disconnect();
-  }, [threshold, rootMargin, once]);
+  }, [alwaysVisible, threshold, rootMargin, once]);
 
-  return { ref, inView };
+  return { ref, inView: alwaysVisible || seen };
 }

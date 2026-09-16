@@ -1,6 +1,5 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import type { ProductLayout, ResolvedProduct } from "@/types/content";
 import { productAnchor } from "@/content/categories";
@@ -8,9 +7,16 @@ import { EditorialImage } from "@/components/ui/EditorialImage";
 import { ToneSwatch } from "@/components/ui/ToneSwatch";
 import { ArrowLead } from "@/components/ui/ArrowLead";
 import { Reveal } from "@/components/motion/Reveal";
-import { useShade } from "@/components/motion/ShadeField";
-import { useInView } from "@/components/motion/useInView";
+import { useShadeClaim } from "@/components/motion/useShadeClaim";
 import { cn } from "@/lib/cn";
+
+export interface Arrangement {
+  /** Grid placement classes for the item. */
+  cell: string;
+  /** Vertical offset, desktop only — this is what moves the top edge. */
+  offset: string;
+  sizes: string;
+}
 
 /**
  * Collection-scale arrangements.
@@ -19,9 +25,7 @@ import { cn } from "@/lib/cn";
  * density. On the homepage a layout describes a *spread* — one product filling
  * the screen, image on one side and copy across the gutter. Here it describes
  * how much of the row that product takes, so the whole collection can be
- * surveyed rather than scrolled through one product at a time. Extending the
- * rhythm to a collection view is the task; repeating the spreads verbatim would
- * only be the homepage again with a different heading.
+ * surveyed rather than scrolled through one product at a time.
  *
  * The spans are chosen so the cycle tiles: 5 + 7 fills a row, 12 is the
  * breakout, and 4 deliberately leaves the row short. Items are auto-placed
@@ -34,10 +38,7 @@ import { cn } from "@/lib/cn";
  * the same treatment the gallery uses to keep a single column from flattening
  * into a stack of equal rectangles.
  */
-const arrangements: Record<
-  ProductLayout,
-  { cell: string; offset: string; sizes: string }
-> = {
+const arrangements: Record<ProductLayout, Arrangement> = {
   tall: {
     cell: "col-span-3 md:col-span-4 md:col-start-auto lg:col-span-5",
     offset: "",
@@ -62,55 +63,59 @@ const arrangements: Record<
   },
 };
 
-export function CollectionItem({ product, index }: { product: ResolvedProduct; index: number }) {
-  const claimShade = useShade();
-  const arrangement = arrangements[product.layout];
-  const claim = useCallback(() => claimShade(product.tone), [claimShade, product.tone]);
+/**
+ * Even halves, for a block of exactly two — the related-products section.
+ *
+ * Deliberately not the layout-driven arrangements above: a pair drawn from
+ * wherever the reader happens to be in the catalogue could come out as
+ * `feature` beside `compact`, which is a breakout next to a thumbnail rather
+ * than a considered pairing. A fixed pair is the honest treatment when the
+ * component cannot know what it will be handed.
+ */
+export const PAIR_ARRANGEMENT: Arrangement = {
+  cell: "col-span-4 md:col-span-4 lg:col-span-6",
+  offset: "",
+  sizes: "(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 46vw",
+};
 
-  /**
-   * Which input drives the ambient shade.
-   *
-   * The homepage claims on scroll, because one product occupies the viewport at
-   * a time and "what you are looking at" is unambiguous. A collection grid puts
-   * two or three products on screen at once, so the same rule would leave them
-   * fighting over the field and flickering as the page moves. Where a real
-   * pointer exists the answer is simply what it is hovering; where there is not
-   * one, the grid is a single column and the homepage's rule is correct again.
-   */
-  const [pointerDriven, setPointerDriven] = useState(false);
-  useEffect(() => {
-    setPointerDriven(window.matchMedia("(hover: hover)").matches);
-  }, []);
+interface CollectionItemProps {
+  product: ResolvedProduct;
+  /** Position in the rendered list — drives the reveal stagger only. */
+  index: number;
+  /** Overrides the layout-driven placement. */
+  arrangement?: Arrangement;
+  /** The product name's heading level, so the outline stays correct on any page. */
+  headingLevel?: 2 | 3;
+}
 
-  const { ref, inView } = useInView<HTMLElement>({
-    threshold: 0.3,
-    rootMargin: "-30% 0px -30% 0px",
-    once: false,
-  });
-
-  useEffect(() => {
-    if (!pointerDriven && inView) claim();
-  }, [pointerDriven, inView, claim]);
+export function CollectionItem({
+  product,
+  index,
+  arrangement,
+  headingLevel = 2,
+}: CollectionItemProps) {
+  const placement = arrangement ?? arrangements[product.layout];
+  const { ref, claimProps } = useShadeClaim(product.tone);
 
   const anchor = productAnchor(product.slug);
   const nameId = `${anchor}-name`;
   const href = `/products/${product.slug}`;
+  const Heading = headingLevel === 2 ? "h2" : "h3";
 
   return (
     <article
       ref={ref}
       id={anchor}
       aria-labelledby={nameId}
-      onPointerEnter={pointerDriven ? claim : undefined}
-      onFocus={pointerDriven ? claim : undefined}
-      className={cn("group-media", arrangement.cell, arrangement.offset)}
+      {...claimProps}
+      className={cn("group-media", placement.cell, placement.offset)}
     >
       <Reveal delay={(index % 3) * 90}>
         {/* Hidden from the tab order and the accessibility tree: the product
             name below goes to the same place, and one destination deserves one
             stop. Same rule as the homepage showcase. */}
         <Link href={href} tabIndex={-1} aria-hidden="true" className="block">
-          <EditorialImage media={product.image} sizes={arrangement.sizes} />
+          <EditorialImage media={product.image} sizes={placement.sizes} />
         </Link>
       </Reveal>
 
@@ -123,12 +128,12 @@ export function CollectionItem({ product, index }: { product: ResolvedProduct; i
           <p className="t-label">{product.latin}</p>
         </div>
 
-        <h2 id={nameId} className="t-h3 mt-4">
+        <Heading id={nameId} className="t-h3 mt-4">
           <Link href={href} className="name-link group-link">
             <span className="name-link__text">{product.name}</span>
             <ArrowLead size={18} />
           </Link>
-        </h2>
+        </Heading>
 
         <p className="t-body mt-3 max-w-[34ch]">{product.description}</p>
       </Reveal>

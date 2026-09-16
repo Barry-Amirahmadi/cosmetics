@@ -10,6 +10,7 @@
     "postbuild": "node scripts/flatten-rsc-payloads.mjs",
     "preview": "node scripts/serve-static.mjs --port 4321",
     "preview:pages": "node scripts/serve-static.mjs --port 4321 --base cosmetics",
+    "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test:smoke": "playwright test",
     "check:viewports": "node scripts/check-viewports.mjs",
@@ -26,6 +27,9 @@
     "@types/node": "^24.0.0",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^16.3.5",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
     "tailwindcss": "4.3.3",
     "typescript": "^5.9.0"
   }
