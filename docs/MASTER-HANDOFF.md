@@ -454,3 +454,14 @@ The project's own `docs/PHASE-01-REPORT.md` was cross-checked against the real c
 ## 49 — KNOWN TECHNICAL RISKS TO RE-CHECK ON A NEXT.JS UPGRADE
 
 * **`scripts/flatten-rsc-payloads.mjs` (added Phase 02 Task 2).** Next 16's static export writes a dynamic route's RSC payload to a nested directory (`out/products/shab/__next.products/$d$slug/__PAGE__.txt`) while the client requests a flat, dot-separated filename (`out/products/shab/__next.products.$d$slug.__PAGE__.txt`) — static routes get the flat name directly, dynamic ones don't, and a Node server normally bridges the gap that doesn't exist on a static host. This script is a `postbuild` step that copies each nested payload to the flat name Next's own client expects. It is reverse-engineered from an undocumented internal naming convention, not a public API — **on any future Next.js upgrade, verify this is still needed and still correct** (build a product route, hard-load it directly rather than navigating to it, and confirm no 404 on the RSC payload request). If the convention has changed, the script will simply find nothing to copy and the site degrades to a single failed background request per hard load, not a visible break — so this can fail silently rather than loudly, which is exactly why it needs a deliberate check rather than waiting for a bug report.
+
+## 50 — AMBIENT SHADE WASH: THE INPUT RULE NOW DEPENDS ON LAYOUT DENSITY (Phase 02 Task 3)
+
+§05's original description ties the shade change to *scroll* — correct on the homepage, where one product spread occupies the viewport at a time. It breaks on any page showing multiple products at once (the collection page, and by the same logic any future "related products" block on the real Product Detail page): scroll makes them fight over the shared field and flicker.
+
+**Resolved rule, canonical from here on:** the input is chosen once per page load, by capability, not by which page it is —
+
+* where a real pointer exists (`(hover: hover)` true), the shade follows **hover and keyboard focus** — both, not hover alone, since keyboard-only users must get the same affordance;
+* where it does not (touch, `(hover: hover)` false), the layout is single-column at that density and the original scroll rule is correct again.
+
+Verified on all three paths (hover, keyboard focus, touch-scroll) against the actual computed `--shade` value, not assumed. Apply this same rule to any future page or section that shows more than one product at a time — do not default to scroll-driven shade just because that was the first implementation; check how many products are on screen at once first.
