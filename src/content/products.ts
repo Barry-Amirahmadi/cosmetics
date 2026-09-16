@@ -1,4 +1,5 @@
 import type { Product } from "@/types/content";
+import { resolveProducts } from "./resolveProducts";
 
 /**
  * PLACEHOLDER CONTENT — Phase 01.
@@ -9,7 +10,9 @@ import type { Product } from "@/types/content";
  * describe *when you use it*, which is neutral and safe to show a client.
  *
  * `tone` is the one field doing design work — it is the product's own shade,
- * and it drives the ambient wash behind the showcase section.
+ * and it drives the ambient wash behind the showcase section. All five seed
+ * products set it, and `layout`, explicitly; both are optional in the type so
+ * a CMS editor can omit them, and resolveProducts() fills the gap.
  */
 export const products: Product[] = [
   {
@@ -94,5 +97,14 @@ export const products: Product[] = [
   },
 ];
 
-/** What the showcase renders. Draft items stay out, exactly as a CMS would. */
-export const publishedProducts = products.filter((p) => p.status === "published");
+/**
+ * What the showcase renders: drafts filtered out, exactly as a CMS would, then
+ * resolved so every product has a `tone` and a `layout`.
+ *
+ * Filter before resolve, never after — the `layout` fallback is positional, so
+ * resolving a list that still contains drafts would shift the arrangements of
+ * everything after the first hidden product.
+ */
+export const publishedProducts = resolveProducts(
+  products.filter((p) => p.status === "published"),
+);

@@ -1,4 +1,5 @@
 import { publishedProducts } from "@/content/products";
+import { FALLBACK_TONE } from "@/content/resolveProducts";
 import { showcase } from "@/content/sections";
 import { SectionHeading } from "@/components/layout/SectionHeading";
 import { ShadeField } from "@/components/motion/ShadeField";
@@ -19,7 +20,7 @@ import { ProductRow } from "./ProductRow";
 export function ProductShowcase() {
   return (
     <section id="products" aria-labelledby="products-heading" className="ground-dark on-dark">
-      <ShadeField initialTone={publishedProducts[0]?.tone ?? "#2A3550"}>
+      <ShadeField initialTone={publishedProducts[0]?.tone ?? FALLBACK_TONE}>
         <div className="container py-[var(--section-y)]">
           <SectionHeading
             id="products-heading"

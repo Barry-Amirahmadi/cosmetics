@@ -40,15 +40,34 @@ export interface Product {
   category: string;
   /** Short Persian description. */
   description: string;
-  /** The product's own shade. Drives the ambient wash behind the showcase. */
-  tone: string;
+  /**
+   * The product's own shade, driving the ambient wash behind the showcase.
+   * Optional because a CMS editor can save a product without picking one —
+   * see resolveProducts() for what happens then.
+   */
+  tone?: string;
   image: MediaAsset;
-  layout: ProductLayout;
+  /** Optional for the same reason as `tone`. */
+  layout?: ProductLayout;
   status: "published" | "draft";
   seo?: {
     title?: string;
     description?: string;
   };
+}
+
+/**
+ * A product with every presentation field guaranteed to be present.
+ *
+ * This is what components consume. `Product` is the *authoring* shape, where
+ * presentation fields may be absent; `ResolvedProduct` is the *rendering*
+ * shape, where they never are. Keeping the two separate means no component
+ * ever carries a `?? fallback` for a missing field, and the defaulting rules
+ * live in exactly one place.
+ */
+export interface ResolvedProduct extends Product {
+  tone: string;
+  layout: ProductLayout;
 }
 
 export interface GalleryItem {
