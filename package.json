@@ -10,9 +10,9 @@
     "postbuild": "node scripts/flatten-rsc-payloads.mjs",
     "preview": "node scripts/serve-static.mjs --port 4321",
     "preview:pages": "node scripts/serve-static.mjs --port 4321 --base cosmetics",
-    "lint": "next lint",
     "typecheck": "tsc --noEmit",
     "test:smoke": "playwright test",
+    "check:viewports": "node scripts/check-viewports.mjs",
     "media": "node scripts/generate-media.mjs"
   },
   "dependencies": {

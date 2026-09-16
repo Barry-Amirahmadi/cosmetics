@@ -17,7 +17,13 @@ import { test, expect, type Page } from "@playwright/test";
  * these tests exist largely to catch base-path regressions, so it should be
  * visible at every call site.
  */
-const BASE = process.env.SMOKE_BASE_PATH ?? "/cosmetics";
+const rawBase = process.env.SMOKE_BASE_PATH ?? "/cosmetics";
+const BASE = rawBase === "/" ? "" : rawBase.replace(/\/+$/, "");
+
+/** Persian digits back to a number, so a rendered count can be compared. */
+function fromFa(text: string): number {
+  return Number(text.replace(/[۰-۹]/g, (d) => String("۰۱۲۳۴۵۶۷۸۹".indexOf(d))).replace(/\D/g, ""));
+}
 
 /** Collects console errors and failed responses for the lifetime of a page. */
 function watch(page: Page) {
@@ -103,6 +109,62 @@ test("a product route survives a hard load under the base path", async ({ page }
   // Regression: a raw <a href="/"> skips basePath and leaves the site entirely.
   const homeLink = page.locator('nav[aria-label="مسیر صفحه"] a').first();
   await expect(homeLink).toHaveAttribute("href", `${BASE}/`);
+
+  expect(failed, "failed requests").toEqual([]);
+  expect(consoleErrors, "console errors").toEqual([]);
+});
+
+test("the collection page lists the catalogue and its index resolves", async ({ page }) => {
+  const { consoleErrors, failed } = watch(page);
+
+  const response = await page.goto(`${BASE}/products/`);
+  expect(response?.status()).toBe(200);
+
+  await expect(page.locator("h1")).toHaveText("همهٔ محصولات، کنار هم");
+
+  // Regression: nav hrefs written as bare hashes pointed at homepage sections
+  // and resolved to nothing once the header rendered on a second page.
+  await expect(
+    page.locator('header nav[aria-label="پیمایش اصلی"] a[aria-current="page"]'),
+  ).toHaveText("محصولات");
+
+  // The index is only structure if its targets exist. A category anchor that
+  // points at a removed product fails silently — the page just does not move.
+  const items = page.locator("article[id^='product-']");
+  const count = await items.count();
+  expect(count).toBeGreaterThan(0);
+
+  const anchors = await page
+    .locator(".collection-index__link")
+    .evaluateAll((els) => els.map((el) => el.getAttribute("href") ?? ""));
+  expect(anchors.length).toBeGreaterThan(0);
+  for (const anchor of anchors) {
+    await expect(page.locator(anchor), `index anchor ${anchor}`).toHaveCount(1);
+  }
+
+  // The printed count is derived, so it must never disagree with what is shown.
+  const printed = await page.locator(".collection-index p.t-meta").innerText();
+  expect(fromFa(printed)).toBe(count);
+
+  await page.evaluate(async () => {
+    const height = document.body.scrollHeight;
+    for (let y = 0; y < height; y += 400) {
+      window.scrollTo({ top: y, behavior: "instant" });
+      await new Promise((r) => setTimeout(r, 50));
+    }
+  });
+
+  const broken = await page.evaluate(
+    () =>
+      [...document.querySelectorAll("img")].filter((i) => i.complete && i.naturalWidth === 0)
+        .length,
+  );
+  expect(broken, "images failing to load").toBe(0);
+
+  const overflows = await page.evaluate(
+    () => document.documentElement.scrollWidth > window.innerWidth + 1,
+  );
+  expect(overflows, "horizontal overflow").toBe(false);
 
   expect(failed, "failed requests").toEqual([]);
   expect(consoleErrors, "console errors").toEqual([]);

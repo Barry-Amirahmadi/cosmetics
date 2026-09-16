@@ -15,14 +15,24 @@ export const site: SiteContent = {
     line: "مجموعه‌ای کوچک از محصولات مراقبت روزمره از پوست.",
   },
 
+  /**
+   * Navigation, mid-migration by design.
+   *
+   * «محصولات» is a real route now that the collection page exists; گالری,
+   * دربارهٔ ما and تماس با ما are still homepage sections and stay as
+   * root-relative in-page targets until Phase 02 tasks 5 and 6 give them pages
+   * of their own. Writing them as `/#gallery` rather than `#gallery` is what
+   * makes them work from `/products/` as well as from `/` — a bare hash
+   * resolves against whatever page the header happens to be rendered on.
+   */
   nav: [
-    { label: "محصولات", href: "#products" },
-    { label: "گالری", href: "#gallery" },
-    { label: "دربارهٔ ما", href: "#brand" },
-    { label: "تماس با ما", href: "#contact" },
+    { label: "محصولات", href: "/products/" },
+    { label: "گالری", href: "/#gallery" },
+    { label: "دربارهٔ ما", href: "/#brand" },
+    { label: "تماس با ما", href: "/#contact" },
   ],
 
-  headerCta: { label: "دریافت مشاوره", href: "#contact" },
+  headerCta: { label: "دریافت مشاوره", href: "/#contact" },
 
   contact: {
     city: "تهران",

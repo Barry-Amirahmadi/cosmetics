@@ -1,4 +1,5 @@
 import Image from "next/image";
+import type { NavItem } from "@/types/content";
 import { cta } from "@/content/sections";
 import { Button } from "@/components/ui/Button";
 import { Eyebrow } from "@/components/ui/Eyebrow";
@@ -16,8 +17,12 @@ import { withBasePath } from "@/lib/basePath";
  * "دریافت مشاوره" scrolls to the contact block in the footer, where the phone
  * and email actually are. A call to action that resolves to itself is a dead
  * end, and Phase 01 has no contact page yet.
+ *
+ * The band is site-wide, so the secondary link is overridable: it points at the
+ * collection, and on the collection page itself that would be the same dead end
+ * the paragraph above is about. Passing `null` drops it and leaves one action.
  */
-export function CtaSection() {
+export function CtaSection({ secondary = cta.secondary }: { secondary?: NavItem | null }) {
   return (
     <section
       id="cta"
@@ -62,9 +67,11 @@ export function CtaSection() {
                 <Button href={cta.primary.href} variant="primary">
                   {cta.primary.label}
                 </Button>
-                <Button href={cta.secondary.href} variant="secondary">
-                  {cta.secondary.label}
-                </Button>
+                {secondary ? (
+                  <Button href={secondary.href} variant="secondary">
+                    {secondary.label}
+                  </Button>
+                ) : null}
               </div>
             </Reveal>
           </div>

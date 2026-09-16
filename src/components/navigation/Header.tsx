@@ -1,8 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { site } from "@/content/site";
+import { hashTarget, routePath } from "@/lib/nav";
 import { Wordmark } from "@/components/ui/Wordmark";
 import { Button } from "@/components/ui/Button";
 import { MobileMenu } from "./MobileMenu";
@@ -20,11 +22,27 @@ export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
+  // Only the in-page nav targets are observed; a route link has no section to
+  // watch, and useActiveSection ignores any id that is not in this document.
   const sectionIds = useMemo(
-    () => site.nav.map((item) => item.href.replace("#", "")).filter(Boolean),
+    () => site.nav.map((item) => hashTarget(item.href)).filter((id): id is string => id !== null),
     [],
   );
-  const active = useActiveSection(sectionIds);
+  const activeSection = useActiveSection(sectionIds);
+  const here = routePath(usePathname() ?? "/");
+
+  /**
+   * Two different kinds of "current" — `page` when the nav item is the route
+   * being viewed, `location` when it is the section being read within it. Using
+   * `page` for a scroll position would tell a screen-reader user they had
+   * navigated somewhere they have not.
+   */
+  const currentState = (href: string) => {
+    const target = hashTarget(href);
+    if (routePath(href) !== here) return undefined;
+    if (target === null) return "page" as const;
+    return activeSection === target ? ("location" as const) : undefined;
+  };
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -41,20 +59,17 @@ export function Header() {
 
           <nav aria-label="پیمایش اصلی" className="hidden lg:block">
             <ul className="flex items-center gap-1">
-              {site.nav.map((item) => {
-                const id = item.href.replace("#", "");
-                return (
-                  <li key={item.href}>
-                    <Link
-                      href={item.href}
-                      className="nav-link"
-                      aria-current={active === id ? "location" : undefined}
-                    >
-                      {item.label}
-                    </Link>
-                  </li>
-                );
-              })}
+              {site.nav.map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    className="nav-link"
+                    aria-current={currentState(item.href)}
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </nav>
 

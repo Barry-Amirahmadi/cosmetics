@@ -12,3 +12,6 @@ build/
 /.playwright/
 next-env.d.ts
 .DS_Store
+
+# Playwright MCP scratch output
+/.playwright-mcp/

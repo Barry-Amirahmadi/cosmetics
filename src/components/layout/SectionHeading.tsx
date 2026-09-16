@@ -8,10 +8,18 @@ interface SectionHeadingProps {
   heading: string;
   lead?: string;
   /** `level` keeps the document outline correct even when the visual size of
-   *  the heading stays the same. Never style a heading into the wrong level. */
-  level?: 2 | 3;
+   *  the heading stays the same. Never style a heading into the wrong level.
+   *  Level 1 is for a page opener — one per document, and only where this
+   *  block *is* the page's title rather than a section's. */
+  level?: 1 | 2 | 3;
   className?: string;
 }
+
+const levels = {
+  1: { tag: "h1", type: "t-h1" },
+  2: { tag: "h2", type: "t-h2" },
+  3: { tag: "h3", type: "t-h2" },
+} as const;
 
 /**
  * Section header, set as a spread rather than a stack.
@@ -33,7 +41,7 @@ export function SectionHeading({
   level = 2,
   className,
 }: SectionHeadingProps) {
-  const Tag = level === 2 ? "h2" : "h3";
+  const { tag: Tag, type } = levels[level];
 
   return (
     <div className={cn("section-head", className)}>
@@ -43,7 +51,7 @@ export function SectionHeading({
 
       <div className="grid-editorial mt-7 items-end">
         <Reveal delay={80} className="col-span-4 md:col-span-8 lg:col-span-7">
-          <Tag id={id} className="t-h2 max-w-[16ch]">
+          <Tag id={id} className={cn(type, "max-w-[16ch]")}>
             {heading}
           </Tag>
         </Reveal>

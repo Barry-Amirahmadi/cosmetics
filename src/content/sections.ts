@@ -6,14 +6,21 @@ import type { MediaAsset, ValueItem } from "@/types/content";
  * Every line below is a *brand position* an editor can rewrite, not a factual
  * claim. Nothing states an ingredient, a test result, a certification or a
  * number, because none was supplied. Read this file as the copy deck.
+ *
+ * LINK RULE (Phase 02): every `href` here is written from the site root — a
+ * route as `/products/`, an in-page target as `/#contact`. Bare `#contact`
+ * worked while the site was a single page and silently resolves to nothing the
+ * moment the same component renders on `/products/`. `next/link` applies the
+ * deployment base path to a root-relative href, so this form is also the only
+ * one that survives being served from a GitHub Pages project subpath.
  */
 
 export const hero = {
   eyebrow: "مجموعهٔ مراقبت از پوست",
   heading: "زیبایی، آهسته اتفاق می‌افتد",
   lead: "پرنیان مجموعه‌ای کوچک از محصولات مراقبت روزمره است. هر فرمول کوتاه نوشته می‌شود و تا زمانی که در استفادهٔ هر روز جای خودش را پیدا نکند، منتشر نمی‌شود.",
-  primary: { label: "مشاهدهٔ مجموعه", href: "#products" },
-  secondary: { label: "دربارهٔ پرنیان", href: "#brand" },
+  primary: { label: "مشاهدهٔ مجموعه", href: "/#products" },
+  secondary: { label: "دربارهٔ پرنیان", href: "/#brand" },
   scrollHint: "پیمایش کنید",
   image: {
     src: "/media/hero-main.svg",
@@ -38,6 +45,33 @@ export const showcase = {
   heading: "پنج محصول، برای یک روتین کامل",
   lead: "هر محصول یک نقش مشخص در روتین دارد. ترتیب استفاده روی هر بسته نوشته شده است.",
   linkLabel: "مشاهدهٔ محصول",
+  /** The homepage showcase is the narrative cut of the collection; this is the
+   *  way out of it into the full collection page. */
+  allLabel: "صفحهٔ مجموعه",
+  allHref: "/products/",
+};
+
+/**
+ * Collection page — the full catalogue.
+ *
+ * Deliberately a different voice from `showcase` above. The homepage sequences
+ * the products as a routine and tells a story about it; this page is the
+ * register of everything that exists, so it opens by describing the collection
+ * rather than by arguing for it. Nothing here counts the products in prose —
+ * the count is rendered from the data, so it cannot go stale.
+ */
+export const collection = {
+  eyebrow: "مجموعه",
+  heading: "همهٔ محصولات، کنار هم",
+  lead: "هر محصول برای یک مرحله از روتین ساخته شده است. برای دیدن جزئیات هر کدام، وارد صفحهٔ آن شوید.",
+  /** Accessible name of the category index; it is a navigation landmark. */
+  indexLabel: "دسته‌بندی محصولات",
+  /** Follows the product count, e.g. «۵ محصول». */
+  countLabel: "محصول",
+  seo: {
+    title: "مجموعه",
+    description: "فهرست کامل محصولات پرنیان، همراه با دستهٔ هر محصول.",
+  },
 };
 
 export const brand = {
@@ -85,8 +119,8 @@ export const cta = {
   eyebrow: "شروع کنید",
   heading: "نمی‌دانید از کجا شروع کنید؟",
   body: "چند پرسش کوتاه دربارهٔ پوست و روتین فعلی‌تان کافی است تا مشخص شود کدام محصول‌ها به کارتان می‌آیند.",
-  primary: { label: "دریافت مشاوره", href: "#contact" },
-  secondary: { label: "مشاهدهٔ محصولات", href: "#products" },
+  primary: { label: "دریافت مشاوره", href: "/#contact" },
+  secondary: { label: "مشاهدهٔ محصولات", href: "/products/" },
   image: {
     src: "/media/cta-field.svg",
     alt: "",

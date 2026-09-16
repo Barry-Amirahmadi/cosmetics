@@ -91,6 +91,97 @@
   border-bottom-color: var(--color-firouzeh-bright);
 }
 
+/* ---- Name link — a heading that navigates ------------------------------- */
+/* Distinct from .link-lead, which sets its own small type size: this one
+   inherits whatever heading it is placed in, so the product name stays the
+   size the type scale gave it. */
+
+.name-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-block-size: 2.75rem;
+}
+.name-link__text {
+  border-block-end: 1px solid transparent;
+  padding-block-end: 0.08em;
+  transition: border-color var(--dur) var(--ease-out);
+}
+.name-link:hover .name-link__text,
+.name-link:focus-visible .name-link__text {
+  border-block-end-color: currentColor;
+}
+
+/* ---- Collection page ---------------------------------------------------- */
+
+/* Contents line under the masthead: the category index at the start edge, the
+   total at the end. Wraps to two lines on a phone rather than scrolling. */
+.collection-index {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-6);
+  margin-block-start: var(--section-y-tight);
+  padding-block-start: var(--space-4);
+  border-block-start: 1px solid var(--color-line);
+}
+
+.collection-index__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--space-6);
+}
+
+.collection-index__link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-block-size: 2.75rem;
+  font-size: var(--text-sm);
+  color: var(--color-ink-2);
+  transition: color var(--dur-fast) var(--ease-out);
+}
+.collection-index__link:hover {
+  color: var(--color-ink);
+}
+
+.collection-index__count {
+  font-size: var(--text-meta);
+  color: var(--color-ink-3);
+}
+
+/* The collection breathes more than a section does — the vertical offsets in
+   the arrangements are what make the top edge move, and they only read as
+   composition if the rows are far enough apart to be separate rows. */
+.collection-grid {
+  row-gap: var(--space-9);
+}
+@media (min-width: 64rem) {
+  .collection-grid {
+    row-gap: var(--space-10);
+  }
+}
+
+/* Category and transliteration on one hairline, the way a caption sits under a
+   plate. The rule is what ties the block to the image above it. */
+.collection-item__meta {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-block-start: var(--space-4);
+  padding-block-start: var(--space-3);
+  border-block-start: 1px solid var(--color-line);
+  transition: border-color var(--dur) var(--ease-out);
+}
+.on-dark .collection-item__meta {
+  border-block-start-color: var(--color-line-dark);
+}
+.group-media:hover .collection-item__meta {
+  border-block-start-color: var(--color-firouzeh-bright);
+}
+
 /* ---- Section header rule ------------------------------------------------ */
 
 .section-head {
@@ -304,6 +395,24 @@
   transition: color var(--dur-fast) var(--ease-out);
 }
 .footer-link:hover {
+  color: var(--color-chalk);
+}
+
+/* ---- Breadcrumb --------------------------------------------------------- */
+/* Same reasoning as .footer-link: small metadata type still needs a
+   finger-sized hit area, and the height has to come from the link rather than
+   from padding on the row, or the trail grows taller than the design intends. */
+
+.crumb {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 2.75rem;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+.crumb:hover {
+  color: var(--color-ink);
+}
+.on-dark .crumb:hover {
   color: var(--color-chalk);
 }
 

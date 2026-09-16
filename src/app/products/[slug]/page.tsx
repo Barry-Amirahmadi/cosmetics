@@ -52,13 +52,13 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             {/* next/link, not a raw anchor: only Link applies the deployment
                 base path, so a bare href="/" would leave the site entirely
                 when this is served from a GitHub Pages project subpath. */}
-            <Link href="/" className="hover:text-[var(--color-ink)]">
+            <Link href="/" className="crumb">
               صفحهٔ اصلی
             </Link>
           </li>
           <li aria-hidden="true">·</li>
           <li>
-            <Link href="/#products" className="hover:text-[var(--color-ink)]">
+            <Link href="/products/" className="crumb">
               محصولات
             </Link>
           </li>
@@ -93,7 +93,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           <Reveal delay={260}>
             <div className="flex flex-wrap gap-3">
               <Button href="/#contact">دریافت مشاوره</Button>
-              <Button href="/#products" variant="secondary">
+              <Button href="/products/" variant="secondary">
                 بازگشت به مجموعه
               </Button>
             </div>
