@@ -5,6 +5,7 @@ import type { CSSProperties } from "react";
 import type { MediaAsset } from "@/types/content";
 import { cn } from "@/lib/cn";
 import { useInView } from "@/components/motion/useInView";
+import { withBasePath } from "@/lib/basePath";
 
 interface EditorialImageProps {
   media: MediaAsset;
@@ -23,9 +24,10 @@ interface EditorialImageProps {
  * picture on the page is treated identically — which is what makes a set of
  * unrelated images read as one shoot.
  *
- * Phase 01 ships generated SVG studies, which are passed through unoptimized.
- * The moment a real JPEG or WebP lands at the same path, Next's optimizer
- * takes over automatically and nothing here changes.
+ * Images are served unoptimized: a static host has no optimisation server.
+ * That also means Next does not prefix the deployment base path onto the src,
+ * so it goes through withBasePath() here — the single chokepoint every image
+ * on the site passes through.
  */
 export function EditorialImage({
   media,
@@ -51,7 +53,7 @@ export function EditorialImage({
     >
       <div className="img-shift">
         <Image
-          src={media.src}
+          src={withBasePath(media.src)}
           alt={media.alt}
           fill
           sizes={sizes}

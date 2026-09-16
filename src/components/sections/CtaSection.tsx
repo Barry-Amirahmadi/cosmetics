@@ -3,6 +3,7 @@ import { cta } from "@/content/sections";
 import { Button } from "@/components/ui/Button";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { Reveal } from "@/components/motion/Reveal";
+import { withBasePath } from "@/lib/basePath";
 
 /**
  * Closing conversion band.
@@ -24,7 +25,7 @@ export function CtaSection() {
       className="ground-darkest on-dark relative overflow-hidden"
     >
       <Image
-        src={cta.image.src}
+        src={withBasePath(cta.image.src)}
         alt=""
         aria-hidden="true"
         fill

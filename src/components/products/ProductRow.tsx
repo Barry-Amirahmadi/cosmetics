@@ -80,7 +80,7 @@ export function ProductRow({ product, index }: { product: Product; index: number
       <Reveal className={cn("group-media col-span-4 md:col-span-8", arrangement.media)}>
         {/* Hidden from the tab order and the accessibility tree: the text link
             below goes to the same place, and one destination deserves one stop. */}
-        <Link href={href} tabIndex={-1} aria-hidden="true" className="block">
+        <Link href={href} prefetch={false} tabIndex={-1} aria-hidden="true" className="block">
           <EditorialImage media={product.image} sizes={arrangement.sizes} />
         </Link>
       </Reveal>
@@ -109,7 +109,12 @@ export function ProductRow({ product, index }: { product: Product; index: number
         </Reveal>
 
         <Reveal delay={260}>
-          <Link href={href} className="link-lead group-link">
+          {/* prefetch disabled: Next 16 writes a dynamic route's RSC payload to
+              a nested directory while the client requests it as a flat
+              dot-separated file, so on a static host every prefetch 404s. It
+              fails 100% of the time today, so turning it off costs nothing and
+              removes the failed round-trips. Re-enable if Next fixes it. */}
+          <Link href={href} prefetch={false} className="link-lead group-link">
             <span className="link-lead__text">{showcase.linkLabel}</span>
             <ArrowLead />
             <span className="sr-only">— {product.name}</span>

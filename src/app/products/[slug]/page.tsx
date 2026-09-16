@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { publishedProducts, products } from "@/content/products";
 import { Section } from "@/components/layout/Section";
@@ -48,15 +49,18 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
       <nav aria-label="مسیر صفحه" className="mb-10">
         <ol className="t-meta flex flex-wrap items-center gap-2">
           <li>
-            <a href="/" className="hover:text-[var(--color-ink)]">
+            {/* next/link, not a raw anchor: only Link applies the deployment
+                base path, so a bare href="/" would leave the site entirely
+                when this is served from a GitHub Pages project subpath. */}
+            <Link href="/" className="hover:text-[var(--color-ink)]">
               صفحهٔ اصلی
-            </a>
+            </Link>
           </li>
           <li aria-hidden="true">·</li>
           <li>
-            <a href="/#products" className="hover:text-[var(--color-ink)]">
+            <Link href="/#products" className="hover:text-[var(--color-ink)]">
               محصولات
-            </a>
+            </Link>
           </li>
           <li aria-hidden="true">·</li>
           <li aria-current="page" className="text-[var(--color-ink)]">

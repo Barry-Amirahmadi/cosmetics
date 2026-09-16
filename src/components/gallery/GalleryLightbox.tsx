@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useCallback, useEffect, useRef } from "react";
 import type { GalleryItem } from "@/types/content";
 import { toFa } from "@/lib/digits";
+import { withBasePath } from "@/lib/basePath";
 
 interface GalleryLightboxProps {
   items: GalleryItem[];
@@ -99,7 +100,7 @@ export function GalleryLightbox({ items, index, onClose, onNavigate }: GalleryLi
           <div className="relative min-h-0 flex-1">
             <Image
               key={item.id}
-              src={item.image.src}
+              src={withBasePath(item.image.src)}
               alt={item.image.alt}
               fill
               sizes="100vw"

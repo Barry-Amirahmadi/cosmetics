@@ -26,8 +26,15 @@ const vazirmatn = Vazirmatn({
   display: "swap",
 });
 
+/**
+ * Absolute origin for Open Graph and canonical URLs. Supplied by the deploy
+ * workflow from `actions/configure-pages`, which knows where the site actually
+ * lives; the local default is a placeholder and is never published.
+ */
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://parnian.example";
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://parnian.example"),
+  metadataBase: new URL(siteUrl),
   title: {
     default: "پرنیان — مراقبت روزمره از پوست",
     template: "%s — پرنیان",

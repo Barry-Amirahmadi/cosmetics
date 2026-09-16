@@ -2,13 +2,15 @@
   "name": "parnian-cosmetics",
   "version": "0.1.0",
   "private": true,
-  "description": "Phase 01 — RTL-first Persian premium cosmetics site",
+  "description": "RTL-first Persian premium cosmetics site — static export for GitHub Pages",
   "scripts": {
     "dev": "next dev -p 3210",
     "build": "next build",
-    "start": "next start -p 3210",
+    "preview": "node scripts/serve-static.mjs --port 4321",
+    "preview:pages": "node scripts/serve-static.mjs --port 4321 --base parnian-cosmetics",
     "lint": "next lint",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "media": "node scripts/generate-media.mjs"
   },
   "dependencies": {
     "next": "16.3.5",
