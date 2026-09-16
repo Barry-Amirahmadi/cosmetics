@@ -110,6 +110,23 @@ test("a product route survives a hard load under the base path", async ({ page }
   const homeLink = page.locator('nav[aria-label="مسیر صفحه"] a').first();
   await expect(homeLink).toHaveAttribute("href", `${BASE}/`);
 
+  // The site's only conversion point (§42). A malformed number or an unencoded
+  // message produces a link that looks fine and opens an empty chat.
+  const inquiry = page.locator('a[href^="https://wa.me/"]');
+  const inquiryHref = await inquiry.getAttribute("href");
+  expect(inquiryHref, "WhatsApp inquiry link").toBeTruthy();
+  expect(decodeURIComponent(inquiryHref!), "product name prefilled").toContain("سرم شب");
+  expect(inquiryHref!, "digits only in the wa.me path").toMatch(/^https:\/\/wa\.me\/\d+\?text=/);
+  await expect(inquiry).toHaveAttribute("rel", /noopener/);
+
+  // Related products must lead somewhere else — a page linking to itself here
+  // is the failure mode of every naive "related" implementation.
+  const relatedLinks = await page
+    .locator('section[aria-labelledby="related-heading"] article a[href]')
+    .evaluateAll((els) => els.map((el) => el.getAttribute("href") ?? ""));
+  expect(relatedLinks.length).toBeGreaterThan(0);
+  expect(relatedLinks.some((href) => href.includes("/products/shab"))).toBe(false);
+
   expect(failed, "failed requests").toEqual([]);
   expect(consoleErrors, "console errors").toEqual([]);
 });

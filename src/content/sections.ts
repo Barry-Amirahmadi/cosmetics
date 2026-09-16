@@ -74,6 +74,32 @@ export const collection = {
   },
 };
 
+/**
+ * Product detail page — labels and the inquiry message.
+ *
+ * The section headings are deliberately modest. «ادامهٔ مجموعه» rather than
+ * «محصولات مرتبط», because with five products in five categories nothing
+ * establishes a relation yet, and a heading that claims one is the kind of
+ * small dishonesty a reader notices.
+ */
+export const productPage = {
+  detailsHeading: "اطلاعات",
+  relatedEyebrow: "ادامه",
+  relatedHeading: "ادامهٔ مجموعه",
+  backLabel: "بازگشت به مجموعه",
+  breadcrumbHome: "صفحهٔ اصلی",
+  breadcrumbCollection: "محصولات",
+  breadcrumbLabel: "مسیر صفحه",
+};
+
+export const inquiry = {
+  label: "پرسش دربارهٔ این محصول",
+  /** `{product}` is replaced with the product name at render time. */
+  message: "سلام. دربارهٔ «{product}» سؤال داشتم.",
+  /** Appended for screen readers to any link that leaves the site. */
+  newWindow: "در پنجرهٔ تازه باز می‌شود",
+};
+
 export const brand = {
   eyebrow: "دربارهٔ پرنیان",
   heading: "روش کار ما",

@@ -38,6 +38,17 @@ export const site: SiteContent = {
     city: "تهران",
     phone: "۰۲۱ — ۰۰۰۰ ۰۰۰۰",
     phoneHref: "+982100000000",
+    /**
+     * WhatsApp number for click-to-chat, in Latin digits with no punctuation —
+     * `wa.me` accepts nothing else, and Persian digits are not matched by `\d`
+     * (§36.5, the bug that produced empty `tel:` links in Phase 01).
+     *
+     * Deliberately not a real number, like the phone and email above. `wa.me`
+     * answers an unassigned number with "this link is invalid" rather than
+     * opening a chat with a stranger, which is the correct behaviour for a
+     * placeholder.
+     */
+    whatsapp: "989000000000",
     email: "hello@parnian.example",
   },
 

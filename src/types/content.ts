@@ -38,8 +38,30 @@ export interface Product {
   latin: string;
   /** Persian category label, e.g. سرم. Drives filtering later. */
   category: string;
-  /** Short Persian description. */
+  /** Short Persian description — one line, used wherever the product is listed. */
   description: string;
+  /**
+   * Detail-page copy. All optional: a product can be published with nothing but
+   * the fields above, and the detail page degrades to the listing copy.
+   *
+   * These are *editorial copy*, the same class of field as `description` — not
+   * product attributes. There is deliberately no `ingredients`, `volume`,
+   * `price` or `skinType` here: no such information has been supplied, and
+   * inventing it is exactly what §44.1 forbids.
+   */
+  statement?: string;
+  /** Body paragraphs. An array so the editor controls the breaks, not a regex. */
+  body?: string[];
+  /**
+   * Key information, as label/value pairs rather than a fixed schema.
+   *
+   * Every value on the five seed products is restated from that product's own
+   * `description` — nothing here asserts anything the brand had not already
+   * said. The list is intentionally uneven between products: where the copy
+   * never stated a time of day, that row is simply absent rather than filled in
+   * to make the table look complete.
+   */
+  details?: { label: string; value: string }[];
   /**
    * The product's own shade, driving the ambient wash behind the showcase.
    * Optional because a CMS editor can save a product without picking one —
@@ -108,6 +130,8 @@ export interface SiteContent {
     /** Dial string, in Latin digits. Kept separate: Persian digits are not
      *  matched by \d, so a tel: href cannot be derived from `phone`. */
     phoneHref: string;
+    /** WhatsApp click-to-chat number, Latin digits only, no punctuation. */
+    whatsapp: string;
     email: string;
   };
   social: NavItem[];
