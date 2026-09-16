@@ -465,3 +465,14 @@ The project's own `docs/PHASE-01-REPORT.md` was cross-checked against the real c
 * where it does not (touch, `(hover: hover)` false), the layout is single-column at that density and the original scroll rule is correct again.
 
 Verified on all three paths (hover, keyboard focus, touch-scroll) against the actual computed `--shade` value, not assumed. Apply this same rule to any future page or section that shows more than one product at a time — do not default to scroll-driven shade just because that was the first implementation; check how many products are on screen at once first.
+
+## 51 — SCOPE PIVOT: THIS IS A PRESENTED TEMPLATE, NOT A CMS-BACKED CLIENT SITE (2026-09-16)
+
+**Amends §18, §21, and §43.** The project owner has clarified the actual goal: this site is a **template/demo shown as a portfolio piece**, not a specific business going into production with a real editor who needs a working CMS day to day. This sharpens §40's "portfolio/demo" framing into a concrete build decision:
+
+* **No real CMS gets integrated.** Sanity, Strapi, WordPress — none of it. §43's plan (select a CMS, connect it, wire a rebuild webhook) does not happen. What *does* still matter, and is already true: the content layer stays typed and source-agnostic (`src/content/*.ts` behind `src/types/content.ts`), so the architecture visibly *could* take a real CMS without a rewrite — that claim is the deliverable, not an actual integration proving it.
+* **Depth should be proportionate to "shown, not operated."** Every remaining page (Product Detail, Gallery, About/Contact) needs to look complete and professional — this is still a portfolio piece and has to hold up to scrutiny — but should not accumulate business-specific depth, content volume, or edge-case handling that only a real, currently-operating business would need. Match the effort to "a reviewer opens this and is convinced," not "a client's staff uses this daily."
+* **Phase 04 (SEO/performance) becomes a baseline pass, not an audit.** Cover the essentials that make a template look technically credible — unique titles, meta descriptions, OG tags, sitemap, robots, basic structured data, no obvious performance red flags — without chasing exhaustive Core Web Vitals optimization or building tooling to track it over time.
+* **Phase 05 (final production QA) is out of scope** unless and until this stops being "a template that gets presented" and becomes an actual launch for a real business. Do not build a production launch checklist for a site that isn't launching.
+
+This does not relax anything already shipped — §13 (accessibility), §41 (static-export correctness), and the defect list in §36 stay full-strength regardless of the template framing, because those are what make the demo credible in the first place, not overhead the demo framing lets you cut.
