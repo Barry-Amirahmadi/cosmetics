@@ -2,12 +2,12 @@
 
 You are continuing PARNIAN. This prompt is meant to take the project from where it stands now all the way to "ready to send" — every remaining task, then Phase 03 and Phase 04 at template scope, then a final readiness pass. Nothing after this prompt is expected; when it's done, the project is done.
 
-**Current state:** Phase 01 and Phase 02 shipped and approved. **Phase 03 (content-architecture audit) is also complete and ruled on.** Part 1 and Part 2 below are finished. What remains is Part 3 (Phase 04 SEO/performance baseline), then Part 4 (final sweep).
+**Current state:** Phase 01, Phase 02, and Phase 03 shipped and approved. **Phase 04 (SEO + performance baseline) is also complete and ruled on.** Parts 1–3 below are finished. **Part 4 — the final sweep — is the only thing left in this prompt.**
 
 **Before writing any code, read in full:**
 
-1. `docs/MASTER-HANDOFF.md` — all of it, including §47–§52. **§51 is the scope pivot, §52 is the content-typing rule Phase 03 just established — read both if you read nothing else.**
-2. `docs/PHASE-03-REPORT.md` and `docs/PHASE-03-RULING.md` — the most recent completed work. If anything about the shade-wash rule, the content-honesty line, or the inquiry CTA pattern is unclear, the Phase 02 task report/ruling pairs have the reasoning behind each.
+1. `docs/MASTER-HANDOFF.md` — all of it, including §47–§53. **§51 is the scope pivot, §52 and §53 are the content-typing and URL-composition rules Phase 03 and Phase 04 just established — read all three if you read nothing else.**
+2. `docs/PHASE-04-REPORT.md` and `docs/PHASE-04-RULING.md` — the most recent completed work. If anything about the shade-wash rule, the content-honesty line, or the inquiry CTA pattern is unclear, the Phase 02 task report/ruling pairs have the reasoning behind each.
 
 Do not restart or redesign anything already shipped. §13 (accessibility), §41 (static-export correctness), and the §36 defect list are full-strength regardless of everything below — that discipline is what makes the demo credible, not overhead to cut.
 
@@ -32,19 +32,9 @@ All six tasks complete and ruled on. Nothing left here.
 
 Content audit complete, ruled on. Every export in `src/content/*.ts` is now typed against `src/types/content.ts` (MASTER-HANDOFF §52), accessible names moved into `src/content/ui.ts`, the README carries the content-architecture note. Nothing left here.
 
-## Part 3 — Phase 04, baseline SEO + performance (per §51)
+## Part 3 — Phase 04, baseline SEO + performance (per §51) ✅ done
 
-One checkpoint, covering:
-
-* **`og:title` is currently identical on all six routes** (root layout sets it once, nothing overrides it per page) — fix this as part of the per-route meta work below, not separately.
-* Unique `<title>` and meta description per route (home, collection, each product, gallery, about/contact).
-* Open Graph tags, including an OG image (reuse existing art direction/assets — don't commission new ones).
-* Canonical URLs, respecting the deployed base path (§41).
-* `sitemap.xml` and `robots.txt`, generated at build time (Next's built-in `sitemap.ts`/`robots.ts` conventions work fine under static export).
-* Structured data (Schema.org) for `Organization` and `Product` where it's a direct, cheap mapping from data already in the content model — skip it anywhere it would require inventing fields to fill it.
-* A basic performance sanity check: no unoptimized asset obviously bloating a page, fonts and images loading as designed (§07, §47), no console errors. Don't build a Lighthouse-tracking pipeline — spot-check and fix anything that's actually wrong.
-
-Report briefly and checkpoint.
+Per-route metadata, canonicals (fixed the origin/base-path composition bug, MASTER-HANDOFF §53), sitemap + robots, structured data (deliberately no `offers`/`aggregateRating`/`sameAs` — no commerce, no reviews, §44.1), and a generated OG share card, all complete and ruled on. Nothing left here.
 
 ## Part 4 — Final readiness pass (the last step)
 
