@@ -2,12 +2,12 @@
 
 You are continuing PARNIAN. This prompt is meant to take the project from where it stands now all the way to "ready to send" — every remaining task, then Phase 03 and Phase 04 at template scope, then a final readiness pass. Nothing after this prompt is expected; when it's done, the project is done.
 
-**Current state:** Phase 01 shipped and approved. Phase 02: Tasks 1–4 complete and ruled on (static export + deploy, content fallbacks, collection page, product detail page). Tasks 5 and 6 remain.
+**Current state:** Phase 01 shipped and approved. Phase 02: Tasks 1–5 complete and ruled on (static export + deploy, content fallbacks, collection page, product detail page, gallery page). Only Task 6 remains before Phase 03 and Phase 04.
 
 **Before writing any code, read in full:**
 
 1. `docs/MASTER-HANDOFF.md` — all of it, including §47–§51. **§51 is the one that changes what you're about to build — read it first if you read nothing else.**
-2. `docs/PHASE-02-TASK-04-REPORT.md` and `docs/PHASE-02-TASK-04-RULING.md` — the most recent completed work. If anything about the shade-wash rule, the content-honesty line, or the inquiry CTA pattern is unclear, the Task 1–3 report/ruling pairs have the reasoning behind each.
+2. `docs/PHASE-02-TASK-05-REPORT.md` and `docs/PHASE-02-TASK-05-RULING.md` — the most recent completed work. If anything about the shade-wash rule, the content-honesty line, or the inquiry CTA pattern is unclear, the Task 1–4 report/ruling pairs have the reasoning behind each.
 
 Do not restart or redesign anything already shipped. §13 (accessibility), §41 (static-export correctness), and the §36 defect list are full-strength regardless of everything below — that discipline is what makes the demo credible, not overhead to cut.
 
@@ -26,11 +26,7 @@ This site is a **template shown as a portfolio piece** — not a specific busine
 
 ## Part 1 — Finish Phase 02
 
-Same checkpoint discipline as before: one task at a time, verify against the real static export (not `next dev`), write a `docs/PHASE-02-TASK-0N-REPORT.md`, stop, wait for a ruling before the next task.
-
-### Task 5 — Gallery page
-
-Extend the homepage gallery's asymmetric band treatment (§12) rather than inventing a new visual language. Template-scope note: this needs to look like a real gallery experience, not a placeholder grid — but doesn't need more than the images already in `/public/media`.
+Same checkpoint discipline as before: verify against the real static export (not `next dev`), write a `docs/PHASE-02-TASK-06-REPORT.md`, stop, wait for a ruling before moving into Part 2.
 
 ### Task 6 — About / Contact
 
