@@ -2,12 +2,12 @@
 
 You are continuing PARNIAN. This prompt is meant to take the project from where it stands now all the way to "ready to send" — every remaining task, then Phase 03 and Phase 04 at template scope, then a final readiness pass. Nothing after this prompt is expected; when it's done, the project is done.
 
-**Current state:** Phase 01 shipped and approved. **Phase 02 is complete — all six tasks done and ruled on** (static export + deploy, content fallbacks, collection page, product detail page, gallery page, about/contact — which closed the nav). Part 1 below is finished. What remains is Part 2 (Phase 03 audit), Part 3 (Phase 04 baseline), Part 4 (final sweep).
+**Current state:** Phase 01 and Phase 02 shipped and approved. **Phase 03 (content-architecture audit) is also complete and ruled on.** Part 1 and Part 2 below are finished. What remains is Part 3 (Phase 04 SEO/performance baseline), then Part 4 (final sweep).
 
 **Before writing any code, read in full:**
 
-1. `docs/MASTER-HANDOFF.md` — all of it, including §47–§51. **§51 is the one that changes what you're about to build — read it first if you read nothing else.**
-2. `docs/PHASE-02-TASK-06-REPORT.md` and `docs/PHASE-02-TASK-06-RULING.md` — the most recent completed work, which closed Phase 02. If anything about the shade-wash rule, the content-honesty line, or the inquiry CTA pattern is unclear, the Task 1–5 report/ruling pairs have the reasoning behind each.
+1. `docs/MASTER-HANDOFF.md` — all of it, including §47–§52. **§51 is the scope pivot, §52 is the content-typing rule Phase 03 just established — read both if you read nothing else.**
+2. `docs/PHASE-03-REPORT.md` and `docs/PHASE-03-RULING.md` — the most recent completed work. If anything about the shade-wash rule, the content-honesty line, or the inquiry CTA pattern is unclear, the Phase 02 task report/ruling pairs have the reasoning behind each.
 
 Do not restart or redesign anything already shipped. §13 (accessibility), §41 (static-export correctness), and the §36 defect list are full-strength regardless of everything below — that discipline is what makes the demo credible, not overhead to cut.
 
@@ -28,19 +28,15 @@ This site is a **template shown as a portfolio piece** — not a specific busine
 
 All six tasks complete and ruled on. Nothing left here.
 
-## Part 2 — Phase 03, template scope (per §51)
+## Part 2 — Phase 03, template scope (per §51) ✅ done
 
-This is a light pass, not a multi-task phase. In one checkpoint:
-
-1. **Audit, don't build.** Confirm every content type introduced across Tasks 5–6 stayed inside the `src/content/*.ts` / `src/types/content.ts` pattern — no component ended up with hardcoded business copy that should have been a content field (§28). Fix anything that drifted.
-2. **Optional, if it's cheap: a short "content architecture" note** (a section in `README.md` is enough, a new doc is not needed) stating plainly that content is modelled through typed, source-agnostic interfaces and swapping in a real CMS is a per-collection data-fetching change, not a component rewrite. Skip it if it doesn't fit naturally; don't force it.
-
-No Sanity, no CMS account, no webhook, no new runtime dependency. Report briefly and checkpoint.
+Content audit complete, ruled on. Every export in `src/content/*.ts` is now typed against `src/types/content.ts` (MASTER-HANDOFF §52), accessible names moved into `src/content/ui.ts`, the README carries the content-architecture note. Nothing left here.
 
 ## Part 3 — Phase 04, baseline SEO + performance (per §51)
 
 One checkpoint, covering:
 
+* **`og:title` is currently identical on all six routes** (root layout sets it once, nothing overrides it per page) — fix this as part of the per-route meta work below, not separately.
 * Unique `<title>` and meta description per route (home, collection, each product, gallery, about/contact).
 * Open Graph tags, including an OG image (reuse existing art direction/assets — don't commission new ones).
 * Canonical URLs, respecting the deployed base path (§41).
