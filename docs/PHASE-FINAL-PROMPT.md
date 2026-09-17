@@ -1,30 +1,32 @@
-# PARNIAN — Finish Phase 02, then Phase 03 and Phase 04 (template scope)
+# PARNIAN — Finish the project, end to end, ready to present
 
-You are continuing PARNIAN. Phase 01 is shipped and approved. Phase 02 is partway done: Task 1 (static export + deploy), Task 2 (content fallbacks), and Task 3 (collection page) are complete and ruled on. This prompt covers the rest of Phase 02, then moves into Phase 03 and Phase 04 — reframed by a scope decision made after Task 3, below.
+You are continuing PARNIAN. This prompt is meant to take the project from where it stands now all the way to "ready to send" — every remaining task, then Phase 03 and Phase 04 at template scope, then a final readiness pass. Nothing after this prompt is expected; when it's done, the project is done.
+
+**Current state:** Phase 01 shipped and approved. Phase 02: Tasks 1–4 complete and ruled on (static export + deploy, content fallbacks, collection page, product detail page). Tasks 5 and 6 remain.
 
 **Before writing any code, read in full:**
 
-1. `docs/MASTER-HANDOFF.md` — read all of it, including §47–§51. **§51 is the one that changes what you're about to build — read it first if you read nothing else.**
-2. `docs/PHASE-02-TASK-03-REPORT.md` and `docs/PHASE-02-TASK-03-RULING.md` — the most recent completed work and the rulings on it (hover/focus shade rule, hero CTA, ESLint). If anything about the collection page or the shade-wash rule is unclear, also check the Task 1 and Task 2 report/ruling pairs.
+1. `docs/MASTER-HANDOFF.md` — all of it, including §47–§51. **§51 is the one that changes what you're about to build — read it first if you read nothing else.**
+2. `docs/PHASE-02-TASK-04-REPORT.md` and `docs/PHASE-02-TASK-04-RULING.md` — the most recent completed work. If anything about the shade-wash rule, the content-honesty line, or the inquiry CTA pattern is unclear, the Task 1–3 report/ruling pairs have the reasoning behind each.
 
 Do not restart or redesign anything already shipped. §13 (accessibility), §41 (static-export correctness), and the §36 defect list are full-strength regardless of everything below — that discipline is what makes the demo credible, not overhead to cut.
 
-## The scope decision that changes this prompt (MASTER-HANDOFF §51)
+## Resolved since the last prompt
+
+**The WhatsApp number stays a placeholder, permanently, not just for now.** Confirmed directly by the project owner — do not wire a real number at any point in this prompt, including in Part 4. It is meant to demonstrate the inquiry pattern, not receive real messages.
+
+## The scope decision that governs everything below (MASTER-HANDOFF §51)
 
 This site is a **template shown as a portfolio piece** — not a specific business going into production with a real editor. Concretely:
 
 * **No real CMS gets integrated in Phase 03.** No Sanity, no Strapi, no WordPress, no webhook, no hosted account of any kind. The content layer already being typed and source-agnostic (`src/content/*.ts` behind `src/types/content.ts`) *is* the CMS-readiness story — the deliverable is that the architecture visibly could take a CMS without a rewrite, not a working integration proving it.
 * **Match effort to "a reviewer opens this and is convinced," not "a client's staff uses this daily."** Every remaining page needs to look complete and professional, but don't accumulate business-specific depth, content volume, or edge-case handling that only a real operating business would need.
 * **Phase 04 is a baseline pass, not an audit.** Cover the essentials that make a template look technically credible. Don't build Core Web Vitals tracking infrastructure or chase diminishing-return performance work.
-* **Phase 05 (final production QA) is not part of this prompt.** Don't build a launch checklist for a site that isn't launching.
+* **Phase 05 (full production QA) doesn't exist as its own phase.** Part 4 below is the template-scope equivalent — a final sweep, not a launch checklist for a site that isn't launching.
 
 ## Part 1 — Finish Phase 02
 
 Same checkpoint discipline as before: one task at a time, verify against the real static export (not `next dev`), write a `docs/PHASE-02-TASK-0N-REPORT.md`, stop, wait for a ruling before the next task.
-
-### Task 4 — Product Detail page (replaces the `/products/[slug]` stub)
-
-Product hero, name, short statement, photography, description, key information, related products, an inquiry CTA (§42 — WhatsApp click-to-chat pre-filled with the product name). **Apply §50's hover/keyboard-focus Ambient Shade Wash rule to the related-products block from the start** — it shows multiple products at once, so scroll-driven shade would flicker there exactly as it would have on the collection page. Keep the breadcrumb pattern already fixed in Task 3 (44px hit targets, `next/link`, not raw anchors). Don't invent product attributes or claims that don't already exist in the content model (§44.1).
 
 ### Task 5 — Gallery page
 
@@ -32,14 +34,14 @@ Extend the homepage gallery's asymmetric band treatment (§12) rather than inven
 
 ### Task 6 — About / Contact
 
-Scope against what a template actually needs to demonstrate: a brand story block and the same inquiry architecture as the product pages (§42 — WhatsApp/Instagram primary; a form only with a static-compatible backend, never a custom API route). Don't invent a large amount of brand history — a short, well-written editorial paragraph is more convincing than a padded one for this purpose.
+Scope against what a template actually needs to demonstrate: a brand story block and the same inquiry architecture as the product pages (§42 — WhatsApp/Instagram primary; a form only with a static-compatible backend, never a custom API route). Don't invent a large amount of brand history — a short, well-written editorial paragraph is more convincing than a padded one for this purpose. Remember the WhatsApp number is a permanent placeholder (above) — same one used on the product pages, not a different number.
 
 ## Part 2 — Phase 03, template scope (per §51)
 
 This is a light pass, not a multi-task phase. In one checkpoint:
 
-1. **Audit, don't build.** Confirm every content type introduced across Tasks 4–6 stayed inside the `src/content/*.ts` / `src/types/content.ts` pattern — no component ended up with hardcoded business copy that should have been a content field (§28). Fix anything that drifted.
-2. **Optional, if it's cheap: a short "content architecture" note** (a section in `README.md` is enough, a new doc is not needed) stating plainly that content is modelled through typed, source-agnostic interfaces and swapping in a real CMS is a per-collection data-fetching change, not a component rewrite. This is a presentation asset — it's the kind of thing a reviewer of a template reads to trust the architecture. Skip it if it doesn't fit naturally; don't force it.
+1. **Audit, don't build.** Confirm every content type introduced across Tasks 5–6 stayed inside the `src/content/*.ts` / `src/types/content.ts` pattern — no component ended up with hardcoded business copy that should have been a content field (§28). Fix anything that drifted.
+2. **Optional, if it's cheap: a short "content architecture" note** (a section in `README.md` is enough, a new doc is not needed) stating plainly that content is modelled through typed, source-agnostic interfaces and swapping in a real CMS is a per-collection data-fetching change, not a component rewrite. Skip it if it doesn't fit naturally; don't force it.
 
 No Sanity, no CMS account, no webhook, no new runtime dependency. Report briefly and checkpoint.
 
@@ -54,11 +56,23 @@ One checkpoint, covering:
 * Structured data (Schema.org) for `Organization` and `Product` where it's a direct, cheap mapping from data already in the content model — skip it anywhere it would require inventing fields to fill it.
 * A basic performance sanity check: no unoptimized asset obviously bloating a page, fonts and images loading as designed (§07, §47), no console errors. Don't build a Lighthouse-tracking pipeline — spot-check and fix anything that's actually wrong.
 
-Report briefly and checkpoint. This is the last checkpoint this prompt asks for — Phase 05 is out of scope, per §51.
+Report briefly and checkpoint.
 
-## Operating constraints (unchanged from Phase 02)
+## Part 4 — Final readiness pass (the last step)
 
-* Commit locally after each task/part above. **Do not push.** Pushing only happens when you're explicitly told a specific push is the final version to publish — that instruction comes from Barry directly, not from reaching the end of a task list.
-* Ask before adding a new runtime dependency (still exactly 3: `next`, `react`, `react-dom`). `@playwright/test` and a linter (§ Task 3 ruling item 4) are the only approved devDependency additions so far.
+This is not a new feature phase — it's the one full-site check that everything built across every task still holds together as a whole, since each task so far has only verified itself. Do not skip it, and do not add anything new here beyond fixing what it finds.
+
+1. **Full smoke suite + `check-viewports` across every route** — home, collection, every product detail page, gallery, about/contact — at all six viewports, against the deployed base path, on the actual static export.
+2. **`npm run typecheck`, `npm run lint`, `npm run build:pages`** — all clean.
+3. **Click through the whole site once, start to finish, as a visitor would** — nav, every internal link, the lightbox, both inquiry CTAs (product and about/contact), the collection-page category index, hero → showcase → collection → detail → related products → back. Confirm the WhatsApp placeholder behaves as intended (§ above) rather than looking broken.
+4. **`prefers-reduced-motion` and keyboard-only navigation**, once, across the whole site rather than page by page.
+5. Write `docs/PHASE-02-FINAL-REPORT.md` summarizing the whole arc briefly — what exists now (page list, route list), what was deliberately left out and why (real CMS, real WhatsApp number, Phase 05-style production hardening), and the full verification table from this pass.
+
+**Do not push, even here.** "Ready to send" means: everything above is done, committed locally, and reported — not that it goes live automatically. Whether and when to push to `origin/main` is Barry's call to make after reading the final report, same as every push before it.
+
+## Operating constraints (unchanged)
+
+* Commit locally after each task/part above. **Do not push**, at any point in this prompt, including Part 4.
+* Ask before adding a new runtime dependency (still exactly 3: `next`, `react`, `react-dom`). `@playwright/test` and ESLint are the only approved devDependency additions so far.
 * Ask before any decision that changes visual identity, taxonomy, or the interaction language in a way nothing in `MASTER-HANDOFF.md` or this prompt already resolves.
-* Verify against the real exported static output for every task, the same way Tasks 1–3 did — that discipline has found a real, invisible-in-`next dev` defect in every single task so far.
+* Verify against the real exported static output for every task — that discipline has found a real, invisible-in-`next dev` defect in every single task so far.
