@@ -2,12 +2,12 @@
 
 You are continuing PARNIAN. This prompt is meant to take the project from where it stands now all the way to "ready to send" — every remaining task, then Phase 03 and Phase 04 at template scope, then a final readiness pass. Nothing after this prompt is expected; when it's done, the project is done.
 
-**Current state:** Phase 01 shipped and approved. Phase 02: Tasks 1–5 complete and ruled on (static export + deploy, content fallbacks, collection page, product detail page, gallery page). Only Task 6 remains before Phase 03 and Phase 04.
+**Current state:** Phase 01 shipped and approved. **Phase 02 is complete — all six tasks done and ruled on** (static export + deploy, content fallbacks, collection page, product detail page, gallery page, about/contact — which closed the nav). Part 1 below is finished. What remains is Part 2 (Phase 03 audit), Part 3 (Phase 04 baseline), Part 4 (final sweep).
 
 **Before writing any code, read in full:**
 
 1. `docs/MASTER-HANDOFF.md` — all of it, including §47–§51. **§51 is the one that changes what you're about to build — read it first if you read nothing else.**
-2. `docs/PHASE-02-TASK-05-REPORT.md` and `docs/PHASE-02-TASK-05-RULING.md` — the most recent completed work. If anything about the shade-wash rule, the content-honesty line, or the inquiry CTA pattern is unclear, the Task 1–4 report/ruling pairs have the reasoning behind each.
+2. `docs/PHASE-02-TASK-06-REPORT.md` and `docs/PHASE-02-TASK-06-RULING.md` — the most recent completed work, which closed Phase 02. If anything about the shade-wash rule, the content-honesty line, or the inquiry CTA pattern is unclear, the Task 1–5 report/ruling pairs have the reasoning behind each.
 
 Do not restart or redesign anything already shipped. §13 (accessibility), §41 (static-export correctness), and the §36 defect list are full-strength regardless of everything below — that discipline is what makes the demo credible, not overhead to cut.
 
@@ -24,13 +24,9 @@ This site is a **template shown as a portfolio piece** — not a specific busine
 * **Phase 04 is a baseline pass, not an audit.** Cover the essentials that make a template look technically credible. Don't build Core Web Vitals tracking infrastructure or chase diminishing-return performance work.
 * **Phase 05 (full production QA) doesn't exist as its own phase.** Part 4 below is the template-scope equivalent — a final sweep, not a launch checklist for a site that isn't launching.
 
-## Part 1 — Finish Phase 02
+## Part 1 — Finish Phase 02 ✅ done
 
-Same checkpoint discipline as before: verify against the real static export (not `next dev`), write a `docs/PHASE-02-TASK-06-REPORT.md`, stop, wait for a ruling before moving into Part 2.
-
-### Task 6 — About / Contact
-
-Scope against what a template actually needs to demonstrate: a brand story block and the same inquiry architecture as the product pages (§42 — WhatsApp/Instagram primary; a form only with a static-compatible backend, never a custom API route). Don't invent a large amount of brand history — a short, well-written editorial paragraph is more convincing than a padded one for this purpose. Remember the WhatsApp number is a permanent placeholder (above) — same one used on the product pages, not a different number.
+All six tasks complete and ruled on. Nothing left here.
 
 ## Part 2 — Phase 03, template scope (per §51)
 
