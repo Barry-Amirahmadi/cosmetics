@@ -1,4 +1,5 @@
 import type { ResolvedProduct } from "@/types/content";
+import { collection } from "@/content/sections";
 import { FALLBACK_TONE } from "@/content/resolveProducts";
 import { ShadeField } from "@/components/motion/ShadeField";
 import { CollectionItem } from "./CollectionItem";
@@ -19,7 +20,7 @@ import { CollectionItem } from "./CollectionItem";
  */
 export function CollectionGrid({ products }: { products: ResolvedProduct[] }) {
   return (
-    <section aria-label="محصولات" className="ground-dark on-dark">
+    <section aria-label={collection.listLabel} className="ground-dark on-dark">
       <ShadeField initialTone={products[0]?.tone ?? FALLBACK_TONE}>
         <div className="container py-[var(--section-y)]">
           <div className="grid-editorial collection-grid items-start">

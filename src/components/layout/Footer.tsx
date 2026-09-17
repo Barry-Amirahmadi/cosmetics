@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { site } from "@/content/site";
+import { ui } from "@/content/ui";
 import { Reveal } from "@/components/motion/Reveal";
 import { ArrowLead } from "@/components/ui/ArrowLead";
 
@@ -28,9 +29,12 @@ export function Footer() {
           </div>
 
           {/* Navigation */}
-          <nav className="col-span-2 md:col-span-4 lg:col-start-6 lg:col-span-2" aria-label="پیمایش پانوشت">
+          <nav
+            className="col-span-2 md:col-span-4 lg:col-start-6 lg:col-span-2"
+            aria-label={ui.nav.footer}
+          >
             <Reveal delay={60}>
-              <h2 className="t-label mb-5">مجموعه</h2>
+              <h2 className="t-label mb-5">{site.footer.navHeading}</h2>
               <ul className="flex flex-col">
                 {site.nav.map((item) => (
                   <li key={item.href}>
@@ -46,7 +50,7 @@ export function Footer() {
           {/* Contact */}
           <div className="col-span-2 md:col-span-4 lg:col-span-2">
             <Reveal delay={120}>
-              <h2 className="t-label mb-5">تماس</h2>
+              <h2 className="t-label mb-5">{site.footer.contactHeading}</h2>
               <ul className="flex flex-col">
                 <li className="t-meta flex min-h-11 items-center">{site.contact.city}</li>
                 <li>

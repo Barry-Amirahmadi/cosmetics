@@ -14,9 +14,9 @@ import { withBasePath } from "@/lib/basePath";
  * loud exactly once. The action is a consultation, not a checkout: nothing in
  * the brief establishes a store.
  *
- * "دریافت مشاوره" scrolls to the contact block in the footer, where the phone
- * and email actually are. A call to action that resolves to itself is a dead
- * end, and Phase 01 has no contact page yet.
+ * The primary action lands on the contact block of the about page, where both
+ * inquiry paths and the direct details are. A call to action that resolves to
+ * itself is a dead end — which is why this band is absent from that page.
  *
  * The band is site-wide, so the secondary link is overridable: it points at the
  * collection, and on the collection page itself that would be the same dead end

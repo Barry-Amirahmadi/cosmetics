@@ -34,6 +34,16 @@ export const site: SiteContent = {
   },
 
   /**
+   * Document title for the site as a whole. `titleTemplate` wraps whatever a
+   * route supplies, so the brand name is written once here rather than being
+   * repeated into every page's `<title>` by hand.
+   */
+  seo: {
+    title: "پرنیان — مراقبت روزمره از پوست",
+    titleTemplate: "%s — پرنیان",
+  },
+
+  /**
    * Navigation, mid-migration by design.
    *
    * Every entry is a real destination now. «تماس با ما» deep-links to the
@@ -89,6 +99,12 @@ export const site: SiteContent = {
    * no change to any component.
    */
   legal: [],
+
+  /** The two column headings in the footer — brand copy, not structure. */
+  footer: {
+    navHeading: "مجموعه",
+    contactHeading: "تماس",
+  },
 
   newsletter: {
     heading: "خبرنامه",

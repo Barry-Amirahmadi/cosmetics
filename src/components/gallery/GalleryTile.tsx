@@ -1,6 +1,7 @@
 "use client";
 
 import type { GalleryItem } from "@/types/content";
+import { gallery } from "@/content/sections";
 import { EditorialImage } from "@/components/ui/EditorialImage";
 import { cn } from "@/lib/cn";
 
@@ -23,7 +24,13 @@ export function GalleryTile({ item, sizes, onOpen, className }: GalleryTileProps
     <figure className={cn("group-media", className)}>
       <button type="button" onClick={onOpen} className="gallery-tile">
         <EditorialImage media={item.image} sizes={sizes} />
-        <span className="sr-only">بزرگ‌نمایی {item.title}</span>
+        {/* The button's whole accessible name: the tile is an image and a
+            button, so it has to say what pressing it does. `viewLabel` was
+            already in the copy deck and this markup had a second copy of the
+            same word — editing the field changed nothing until now. */}
+        <span className="sr-only">
+          {gallery.viewLabel} {item.title}
+        </span>
       </button>
       <figcaption className="gallery-tile__meta">
         <span className="t-meta text-[var(--color-ink)]">{item.title}</span>

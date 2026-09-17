@@ -121,6 +121,16 @@ export interface SiteContent {
     /** One line, used in the footer and as the meta description base. */
     line: string;
   };
+  /**
+   * Document-level metadata for the site as a whole. Per-route titles live on
+   * the section that owns the route; these are the default and the wrapper.
+   */
+  seo: {
+    /** The homepage <title>, and the fallback for any route without its own. */
+    title: string;
+    /** `%s` is the route's own title — Next substitutes it. */
+    titleTemplate: string;
+  };
   nav: NavItem[];
   headerCta: NavItem;
   contact: {
@@ -138,6 +148,11 @@ export interface SiteContent {
   };
   social: NavItem[];
   legal: NavItem[];
+  /** Column headings in the footer. Brand copy, not structure. */
+  footer: {
+    navHeading: string;
+    contactHeading: string;
+  };
   newsletter: {
     heading: string;
     body: string;
@@ -145,4 +160,163 @@ export interface SiteContent {
     action: string;
   };
   copyright: string;
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Section copy                                                              */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Every band and every page opens the same way: a micro-label, a heading, and
+ * a lead paragraph. Declared once here so the shape is a contract rather than
+ * a convention the next section might quietly not follow.
+ */
+export interface SectionIntro {
+  /** Micro-label above the heading. */
+  eyebrow: string;
+  heading: string;
+  lead: string;
+}
+
+/** Per-route metadata, on the section that owns the route. */
+export interface SeoFields {
+  title: string;
+  description: string;
+}
+
+export interface HeroContent extends SectionIntro {
+  primary: NavItem;
+  secondary: NavItem;
+  scrollHint: string;
+  image: MediaAsset;
+  inset: MediaAsset;
+  insetCaption: string;
+}
+
+export interface StatementContent {
+  text: string;
+  attribution: string;
+}
+
+export interface ShowcaseContent extends SectionIntro {
+  /** Label on each product's link out of the showcase. */
+  linkLabel: string;
+  /** The way out of the narrative cut and into the full collection. */
+  allLabel: string;
+  allHref: string;
+}
+
+export interface CollectionContent extends SectionIntro {
+  /** Accessible name of the category index, which is a navigation landmark. */
+  indexLabel: string;
+  /** Accessible name of the product list itself. */
+  listLabel: string;
+  /** Follows the rendered product count, e.g. «۵ محصول». */
+  countLabel: string;
+  seo: SeoFields;
+}
+
+export interface ProductPageContent {
+  detailsHeading: string;
+  relatedEyebrow: string;
+  relatedHeading: string;
+  backLabel: string;
+  breadcrumbHome: string;
+  breadcrumbCollection: string;
+  breadcrumbLabel: string;
+}
+
+export interface InquiryContent {
+  label: string;
+  /** `{product}` is substituted with the product name at render time. */
+  message: string;
+  /** The same channel with no product in hand — the about page. */
+  generalLabel: string;
+  generalMessage: string;
+  /** Appended for screen readers to any link that leaves the site. */
+  newWindow: string;
+}
+
+export interface BrandContent extends SectionIntro {
+  image: MediaAsset;
+}
+
+export interface GalleryContent extends SectionIntro {
+  /** Accessible name of each tile's zoom button, on both gallery surfaces. */
+  viewLabel: string;
+  allLabel: string;
+  allHref: string;
+}
+
+export interface GalleryPageContent extends SectionIntro {
+  seo: SeoFields;
+}
+
+export interface AboutContent extends SectionIntro {
+  /** Body paragraphs. An array so the editor controls the breaks. */
+  body: string[];
+  image: MediaAsset;
+  seo: SeoFields;
+}
+
+export interface ContactContent extends SectionIntro {
+  instagramLabel: string;
+  /** Row labels of the direct-details list. */
+  labels: { city: string; phone: string; email: string };
+}
+
+/** Not a `SectionIntro`: this band carries a body paragraph, not a lead. */
+export interface CtaContent {
+  eyebrow: string;
+  heading: string;
+  body: string;
+  primary: NavItem;
+  secondary: NavItem;
+  image: MediaAsset;
+}
+
+export interface NotFoundContent {
+  eyebrow: string;
+  heading: string;
+  lead: string;
+  action: NavItem;
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Interface strings                                                         */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Accessible names, and the few words the interface says on its own behalf
+ * rather than the brand's.
+ *
+ * These are modelled for the same reason the copy deck is: §28 has no exception
+ * for text only a screen reader hears, and a string a component hardcodes is a
+ * string no editor and no translator can reach. Part of this set was already in
+ * the copy deck — `collection.indexLabel`, `productPage.breadcrumbLabel`,
+ * `inquiry.newWindow` — so the question was never whether these belong in
+ * content, only whether the rule was applied evenly. It is now.
+ */
+export interface UiStrings {
+  /** First focusable element on every page. */
+  skipToContent: string;
+  nav: {
+    /** Accessible name of the header's navigation landmark. */
+    primary: string;
+    footer: string;
+    /** Trailing half of the wordmark's accessible name, after the brand name. */
+    home: string;
+    openMenu: string;
+    closeMenu: string;
+    /** The mobile panel is a dialog and needs its own name. */
+    menuDialog: string;
+  };
+  gallery: {
+    lightbox: string;
+    close: string;
+    previous: string;
+    next: string;
+    /** Joins position and total, e.g. «۳ از ۶». */
+    counterJoin: string;
+  };
 }

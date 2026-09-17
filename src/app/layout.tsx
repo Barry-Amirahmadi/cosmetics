@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Markazi_Text, Vazirmatn } from "next/font/google";
 import { site } from "@/content/site";
+import { ui } from "@/content/ui";
 import { Header } from "@/components/navigation/Header";
 import { Footer } from "@/components/layout/Footer";
 import "./globals.css";
@@ -36,15 +37,15 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://parnian.example";
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "پرنیان — مراقبت روزمره از پوست",
-    template: "%s — پرنیان",
+    default: site.seo.title,
+    template: site.seo.titleTemplate,
   },
   description: site.brand.line,
   openGraph: {
     type: "website",
     locale: "fa_IR",
     siteName: site.brand.name,
-    title: "پرنیان — مراقبت روزمره از پوست",
+    title: site.seo.title,
     description: site.brand.line,
   },
   // Canonical URLs, structured data, sitemap and robots are Phase 02, once the
@@ -77,7 +78,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
 
         <a href="#main" className="skip-link">
-          پرش به محتوای اصلی
+          {ui.skipToContent}
         </a>
 
         <Header />

@@ -25,6 +25,33 @@ function fromFa(text: string): number {
   return Number(text.replace(/[۰-۹]/g, (d) => String("۰۱۲۳۴۵۶۷۸۹".indexOf(d))).replace(/\D/g, ""));
 }
 
+/**
+ * Every control on the page must have a non-empty accessible name.
+ *
+ * This exists because the interface strings moved out of the components and
+ * into `src/content/ui.ts`. A mistyped path there does not throw and does not
+ * render visibly wrong — the button still draws, still works, and simply stops
+ * announcing itself, or announces the word "undefined". That is invisible to
+ * every other check in this file and to anyone looking at the screen.
+ */
+async function namelessControls(page: Page): Promise<string[]> {
+  return page.evaluate(() =>
+    [...document.querySelectorAll("button, a[href]")]
+      .filter((el) => (el as HTMLElement).checkVisibility({ visibilityProperty: true }))
+      // An aria-hidden subtree is not in the accessibility tree, so nothing in
+      // it needs a name. The product cards put a second, deliberately hidden
+      // link on the image behind the named one — skipping these is the
+      // difference between a check and a false alarm.
+      .filter((el) => el.closest('[aria-hidden="true"]') === null)
+      .filter((el) => {
+        const label = el.getAttribute("aria-label");
+        const name = label === null ? (el.textContent ?? "") : label;
+        return name.trim() === "" || name.includes("undefined");
+      })
+      .map((el) => `${el.tagName.toLowerCase()}.${el.className || "(no class)"}`),
+  );
+}
+
 /** Collects console errors and failed responses for the lifetime of a page. */
 function watch(page: Page) {
   const consoleErrors: string[] = [];
@@ -84,6 +111,10 @@ test("homepage renders, is RTL, and loads every asset", async ({ page }) => {
 test("gallery lightbox opens and closes", async ({ page }) => {
   await page.goto(`${BASE}/`);
 
+  // Nothing else in this suite sees the header, footer and tile controls at
+  // rest, and they are where most of `ui.ts` is consumed.
+  expect(await namelessControls(page), "controls with no accessible name").toEqual([]);
+
   const firstTile = page.locator("#gallery .gallery-tile").first();
   await firstTile.scrollIntoViewIfNeeded();
   await firstTile.click();
@@ -91,6 +122,11 @@ test("gallery lightbox opens and closes", async ({ page }) => {
   const dialog = page.locator("dialog.lightbox");
   await expect(dialog).toBeVisible();
   await expect(dialog).toHaveJSProperty("open", true);
+  await expect(dialog).toHaveAttribute("aria-label", /\S/);
+
+  // The lightbox's own controls exist only while it is open, so they are absent
+  // from the exported HTML and can only be checked here.
+  expect(await namelessControls(page), "lightbox controls with no name").toEqual([]);
 
   await page.keyboard.press("Escape");
   await expect(dialog).toHaveJSProperty("open", false);

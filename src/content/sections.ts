@@ -1,4 +1,19 @@
-import type { MediaAsset, ValueItem } from "@/types/content";
+import type {
+  AboutContent,
+  BrandContent,
+  CollectionContent,
+  ContactContent,
+  CtaContent,
+  GalleryContent,
+  GalleryPageContent,
+  HeroContent,
+  InquiryContent,
+  NotFoundContent,
+  ProductPageContent,
+  ShowcaseContent,
+  StatementContent,
+  ValueItem,
+} from "@/types/content";
 
 /**
  * PLACEHOLDER CONTENT — Phase 01.
@@ -6,6 +21,12 @@ import type { MediaAsset, ValueItem } from "@/types/content";
  * Every line below is a *brand position* an editor can rewrite, not a factual
  * claim. Nothing states an ingredient, a test result, a certification or a
  * number, because none was supplied. Read this file as the copy deck.
+ *
+ * TYPING RULE (Phase 03): every export is annotated with an interface from
+ * `@/types/content`, never left to inference. An inferred type describes the
+ * literal that happens to be written here; a declared one describes what any
+ * source — this file, or a CMS response — has to provide. Only the second is a
+ * contract, and the second is the whole claim of the content layer.
  *
  * LINK RULE (Phase 02): every `href` here is written from the site root — a
  * route as `/products/`, an in-page target as `/#contact`. Bare `#contact`
@@ -15,7 +36,7 @@ import type { MediaAsset, ValueItem } from "@/types/content";
  * one that survives being served from a GitHub Pages project subpath.
  */
 
-export const hero = {
+export const hero: HeroContent = {
   eyebrow: "مجموعهٔ مراقبت از پوست",
   heading: "زیبایی، آهسته اتفاق می‌افتد",
   lead: "پرنیان مجموعه‌ای کوچک از محصولات مراقبت روزمره است. هر فرمول کوتاه نوشته می‌شود و تا زمانی که در استفادهٔ هر روز جای خودش را پیدا نکند، منتشر نمی‌شود.",
@@ -26,21 +47,21 @@ export const hero = {
     src: "/media/hero-main.svg",
     alt: "نمای اصلی مجموعهٔ پرنیان در نور طبیعی",
     ratio: "4/5",
-  } satisfies MediaAsset,
+  },
   inset: {
     src: "/media/hero-inset.svg",
     alt: "نمای نزدیک از بافت یکی از محصولات",
     ratio: "1/1",
-  } satisfies MediaAsset,
+  },
   insetCaption: "بافت کرم روز",
 };
 
-export const statement = {
+export const statement: StatementContent = {
   text: "ما کم می‌سازیم. محصول تازه وقتی به مجموعه اضافه می‌شود که جای خالی واقعی باشد.",
   attribution: "پرنیان",
 };
 
-export const showcase = {
+export const showcase: ShowcaseContent = {
   eyebrow: "مجموعه",
   heading: "پنج محصول، برای یک روتین کامل",
   lead: "هر محصول یک نقش مشخص در روتین دارد. ترتیب استفاده روی هر بسته نوشته شده است.",
@@ -60,12 +81,14 @@ export const showcase = {
  * rather than by arguing for it. Nothing here counts the products in prose —
  * the count is rendered from the data, so it cannot go stale.
  */
-export const collection = {
+export const collection: CollectionContent = {
   eyebrow: "مجموعه",
   heading: "همهٔ محصولات، کنار هم",
   lead: "هر محصول برای یک مرحله از روتین ساخته شده است. برای دیدن جزئیات هر کدام، وارد صفحهٔ آن شوید.",
   /** Accessible name of the category index; it is a navigation landmark. */
   indexLabel: "دسته‌بندی محصولات",
+  /** Accessible name of the list the index points into. */
+  listLabel: "محصولات",
   /** Follows the product count, e.g. «۵ محصول». */
   countLabel: "محصول",
   seo: {
@@ -82,7 +105,7 @@ export const collection = {
  * establishes a relation yet, and a heading that claims one is the kind of
  * small dishonesty a reader notices.
  */
-export const productPage = {
+export const productPage: ProductPageContent = {
   detailsHeading: "اطلاعات",
   relatedEyebrow: "ادامه",
   relatedHeading: "ادامهٔ مجموعه",
@@ -92,7 +115,7 @@ export const productPage = {
   breadcrumbLabel: "مسیر صفحه",
 };
 
-export const inquiry = {
+export const inquiry: InquiryContent = {
   label: "پرسش دربارهٔ این محصول",
   /** `{product}` is replaced with the product name at render time. */
   message: "سلام. دربارهٔ «{product}» سؤال داشتم.",
@@ -103,7 +126,7 @@ export const inquiry = {
   newWindow: "در پنجرهٔ تازه باز می‌شود",
 };
 
-export const brand = {
+export const brand: BrandContent = {
   eyebrow: "دربارهٔ پرنیان",
   heading: "روش کار ما",
   lead: "چهار اصلی که در هر تصمیم، از فرمول تا بسته‌بندی، به آن برمی‌گردیم.",
@@ -111,7 +134,7 @@ export const brand = {
     src: "/media/values-texture.svg",
     alt: "نمای نزدیک از بافت یکی از محصولات پرنیان",
     ratio: "3/4",
-  } satisfies MediaAsset,
+  },
 };
 
 export const values: ValueItem[] = [
@@ -137,7 +160,7 @@ export const values: ValueItem[] = [
   },
 ];
 
-export const gallery = {
+export const gallery: GalleryContent = {
   eyebrow: "گالری",
   heading: "نگاهی از نزدیک",
   lead: "بافت‌ها، بسته‌بندی و فضای کار — بدون اصلاح رنگ.",
@@ -154,7 +177,7 @@ export const gallery = {
  * content: the homepage shows them as a wall of tiles, this shows them as
  * plates. The copy says so plainly instead of pretending there is more here.
  */
-export const galleryPage = {
+export const galleryPage: GalleryPageContent = {
   eyebrow: "گالری",
   heading: "تصویرها، بی‌عجله",
   lead: "همان تصویرها، بزرگ‌تر از آنچه در صفحهٔ اصلی جا می‌شود. برای تمام‌صفحه، روی هر کدام بزنید.",
@@ -176,7 +199,7 @@ export const galleryPage = {
  * It is also not a restatement of the four values on the homepage. Those say
  * what the brand holds to; this says why the collection stays the size it is.
  */
-export const about = {
+export const about: AboutContent = {
   eyebrow: "دربارهٔ ما",
   heading: "چرا مجموعه کوچک است",
   lead: "مجموعهٔ پرنیان کوچک است و قرار نیست هر فصل بزرگ‌تر شود. دلیلش را اینجا نوشته‌ایم.",
@@ -189,7 +212,7 @@ export const about = {
     src: "/media/gallery-04.svg",
     alt: "گوشه‌ای از میز کار پرنیان در نور صبح",
     ratio: "4/3",
-  } satisfies MediaAsset,
+  },
   seo: {
     title: "دربارهٔ ما",
     description: "چرا مجموعهٔ پرنیان کوچک است، و چطور می‌توانید با ما تماس بگیرید.",
@@ -204,7 +227,7 @@ export const about = {
  * outside what a presented template needs (§51). The mechanism that exists is
  * the one the product pages already use.
  */
-export const contact = {
+export const contact: ContactContent = {
   eyebrow: "تماس",
   heading: "ساده‌ترین راه، پیام مستقیم است",
   lead: "برای پرسش دربارهٔ محصول‌ها یا انتخاب روتین، در واتساپ بنویسید.",
@@ -216,7 +239,7 @@ export const contact = {
   },
 };
 
-export const cta = {
+export const cta: CtaContent = {
   eyebrow: "شروع کنید",
   heading: "نمی‌دانید از کجا شروع کنید؟",
   body: "چند پرسش کوتاه دربارهٔ پوست و روتین فعلی‌تان کافی است تا مشخص شود کدام محصول‌ها به کارتان می‌آیند.",
@@ -226,5 +249,20 @@ export const cta = {
     src: "/media/cta-field.svg",
     alt: "",
     ratio: "16/9",
-  } satisfies MediaAsset,
+  },
+};
+
+/**
+ * The 404 page.
+ *
+ * Copy, like every other page's — it was written into the component itself and
+ * is the last page on the site whose words a CMS could not have reached. A
+ * reader arrives here having already gone wrong, so the page says what happened
+ * and offers exactly one way out rather than a menu of guesses.
+ */
+export const notFound: NotFoundContent = {
+  eyebrow: "صفحه پیدا نشد",
+  heading: "این نشانی وجود ندارد",
+  lead: "ممکن است نشانی تغییر کرده باشد. از صفحهٔ اصلی می‌توانید مجموعه و گالری را ببینید.",
+  action: { label: "بازگشت به صفحهٔ اصلی", href: "/" },
 };

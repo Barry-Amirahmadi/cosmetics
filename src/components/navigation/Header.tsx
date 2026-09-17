@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { site } from "@/content/site";
+import { ui } from "@/content/ui";
 import { hashTarget, routePath } from "@/lib/nav";
 import { Wordmark } from "@/components/ui/Wordmark";
 import { Button } from "@/components/ui/Button";
@@ -57,7 +58,7 @@ export function Header() {
         <div className="container flex items-center justify-between gap-6 py-4">
           <Wordmark />
 
-          <nav aria-label="پیمایش اصلی" className="hidden lg:block">
+          <nav aria-label={ui.nav.primary} className="hidden lg:block">
             <ul className="flex items-center gap-1">
               {site.nav.map((item) => (
                 <li key={item.href}>
@@ -82,7 +83,7 @@ export function Header() {
               type="button"
               className="menu-toggle lg:hidden"
               onClick={() => setMenuOpen(true)}
-              aria-label="گشودن فهرست"
+              aria-label={ui.nav.openMenu}
               aria-expanded={menuOpen}
             >
               <span className="flex w-6 flex-col gap-[6px]">

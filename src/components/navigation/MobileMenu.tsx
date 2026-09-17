@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useRef, type CSSProperties } from "react";
 import { site } from "@/content/site";
+import { ui } from "@/content/ui";
 import { Wordmark } from "@/components/ui/Wordmark";
 import { Button } from "@/components/ui/Button";
 
@@ -73,7 +74,7 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
       data-open={open}
       role="dialog"
       aria-modal="true"
-      aria-label="فهرست اصلی"
+      aria-label={ui.nav.menuDialog}
     >
       <div className="container flex items-center justify-between py-5">
         <Wordmark />
@@ -82,7 +83,7 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
           type="button"
           onClick={onClose}
           className="menu-toggle"
-          aria-label="بستن فهرست"
+          aria-label={ui.nav.closeMenu}
         >
           <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
             <path d="M4 4l12 12M16 4L4 16" stroke="currentColor" strokeWidth="1.25" />
@@ -90,7 +91,10 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
         </button>
       </div>
 
-      <nav className="container flex-1 overflow-y-auto pt-8" aria-label="پیمایش اصلی">
+      {/* Same accessible name as the header's nav, and correctly so: the panel
+          carries `visibility: hidden` while closed, so only ever one of the two
+          is in the accessibility tree. */}
+      <nav className="container flex-1 overflow-y-auto pt-8" aria-label={ui.nav.primary}>
         <ul>
           {site.nav.map((item, i) => (
             <li key={item.href}>

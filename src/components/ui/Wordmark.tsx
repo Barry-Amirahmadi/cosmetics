@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { site } from "@/content/site";
+import { ui } from "@/content/ui";
 import { cn } from "@/lib/cn";
 
 /**
@@ -12,7 +13,7 @@ export function Wordmark({ size = "sm", className }: { size?: "sm" | "lg"; class
     <Link
       href="/"
       className={cn("inline-flex min-h-11 items-center gap-3", className)}
-      aria-label={`${site.brand.name} — صفحهٔ اصلی`}
+      aria-label={`${site.brand.name} — ${ui.nav.home}`}
     >
       <span
         className="t-h2"

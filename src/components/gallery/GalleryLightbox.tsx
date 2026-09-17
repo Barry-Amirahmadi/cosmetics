@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useCallback, useEffect, useRef } from "react";
 import type { GalleryItem } from "@/types/content";
+import { ui } from "@/content/ui";
 import { toFa } from "@/lib/digits";
 import { withBasePath } from "@/lib/basePath";
 
@@ -92,14 +93,14 @@ export function GalleryLightbox({ items, index, onClose, onNavigate }: GalleryLi
     <dialog
       ref={dialogRef}
       className="lightbox on-dark"
-      aria-label="نمای بزرگ تصویر"
+      aria-label={ui.gallery.lightbox}
       onClose={onClose}
     >
       {item ? (
         <div className="flex h-full flex-col">
           <div className="container flex items-center justify-between gap-4 py-4">
             <p className="t-meta">
-              {toFa(index! + 1)} از {toFa(items.length)}
+              {toFa(index! + 1)} {ui.gallery.counterJoin} {toFa(items.length)}
             </p>
             {/* No autoFocus: showModal() already focuses the first focusable
                 descendant, which is this button. The prop was redundant, and
@@ -109,7 +110,7 @@ export function GalleryLightbox({ items, index, onClose, onNavigate }: GalleryLi
               type="button"
               onClick={onClose}
               className="menu-toggle"
-              aria-label="بستن نمای بزرگ"
+              aria-label={ui.gallery.close}
             >
               <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
                 <path d="M4 4l12 12M16 4L4 16" stroke="currentColor" strokeWidth="1.25" />
@@ -142,7 +143,7 @@ export function GalleryLightbox({ items, index, onClose, onNavigate }: GalleryLi
                 type="button"
                 onClick={() => step(-1)}
                 className="menu-toggle"
-                aria-label="تصویر قبلی"
+                aria-label={ui.gallery.previous}
               >
                 <svg width="18" height="18" viewBox="0 0 16 16" aria-hidden="true" fill="none">
                   <path d="M2 8h12M14 8l-5-5M14 8l-5 5" stroke="currentColor" strokeWidth="1.25" />
@@ -152,7 +153,7 @@ export function GalleryLightbox({ items, index, onClose, onNavigate }: GalleryLi
                 type="button"
                 onClick={() => step(1)}
                 className="menu-toggle"
-                aria-label="تصویر بعدی"
+                aria-label={ui.gallery.next}
               >
                 <svg width="18" height="18" viewBox="0 0 16 16" aria-hidden="true" fill="none">
                   <path d="M14 8H2M2 8l5-5M2 8l5 5" stroke="currentColor" strokeWidth="1.25" />
