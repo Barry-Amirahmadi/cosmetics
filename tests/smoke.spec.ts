@@ -234,6 +234,45 @@ test("the gallery page composes every plate and opens the right one", async ({ p
   expect(consoleErrors, "console errors").toEqual([]);
 });
 
+test("the about page owns the contact anchor and both inquiry paths", async ({ page }) => {
+  const { consoleErrors, failed } = watch(page);
+
+  const response = await page.goto(`${BASE}/about/`);
+  expect(response?.status()).toBe(200);
+  await expect(page.locator("h1")).toHaveText("چرا مجموعه کوچک است");
+
+  // Exactly one #contact. The footer carried this id through Phase 01 and the
+  // footer renders on this page too — two of them is a silent duplicate-id
+  // defect that makes the nav anchor land on whichever comes first.
+  await expect(page.locator("#contact")).toHaveCount(1);
+
+  // Both inquiry paths of §42, and neither may be a dead "#".
+  const chat = page.locator('#contact a[href^="https://wa.me/"]');
+  await expect(chat).toHaveCount(1);
+  await expect(chat).toHaveAttribute("rel", /noopener/);
+
+  const instagram = page.locator('#contact a[href*="instagram.com"]');
+  await expect(instagram).toHaveCount(1);
+  await expect(instagram).toHaveAttribute("rel", /noopener/);
+
+  // No link anywhere on the page may be a bare "#": it looks like a link,
+  // focuses like a link, and jumps the reader to the top of the page.
+  const deadLinks = await page
+    .locator('a[href="#"]')
+    .evaluateAll((els) => els.map((el) => (el.textContent ?? "").trim()));
+  expect(deadLinks, "links pointing at #").toEqual([]);
+
+  const broken = await page.evaluate(
+    () =>
+      [...document.querySelectorAll("img")].filter((i) => i.complete && i.naturalWidth === 0)
+        .length,
+  );
+  expect(broken, "images failing to load").toBe(0);
+
+  expect(failed, "failed requests").toEqual([]);
+  expect(consoleErrors, "console errors").toEqual([]);
+});
+
 test("an unknown path serves the styled 404", async ({ page }) => {
   const response = await page.goto(`${BASE}/definitely-not-a-page/`);
 

@@ -1,6 +1,24 @@
 import type { SiteContent } from "@/types/content";
 
 /**
+ * Social handles, in one place because the footer and the contact section both
+ * need them and a second copy is a second thing to get wrong.
+ *
+ * `.example` is the IANA-reserved placeholder name, used here for the same
+ * reason the phone number and the WhatsApp number are unassigned: these must
+ * read unmistakably as stand-ins and must not resolve to some real account that
+ * would then be associated with a fictional brand. They are structurally valid
+ * links — the pattern is demonstrated — that simply do not lead anywhere.
+ */
+const HANDLE = "parnian.example";
+
+const social = {
+  instagram: { label: "اینستاگرام", href: `https://instagram.com/${HANDLE}` },
+  telegram: { label: "تلگرام", href: `https://t.me/${HANDLE}` },
+  pinterest: { label: "پینترست", href: `https://pinterest.com/${HANDLE}` },
+};
+
+/**
  * PLACEHOLDER CONTENT — Phase 01.
  *
  * The brand name, contact details and social handles below are stand-ins so the
@@ -18,20 +36,23 @@ export const site: SiteContent = {
   /**
    * Navigation, mid-migration by design.
    *
-   * «محصولات» and «گالری» are real routes; دربارهٔ ما and تماس با ما are still
-   * homepage sections and stay as root-relative in-page targets until Phase 02
-   * task 6 gives them a page. Writing those as `/#brand` rather than `#brand`
-   * is what makes them work from `/products/` as well as from `/` — a bare hash
-   * resolves against whatever page the header happens to be rendered on.
+   * Every entry is a real destination now. «تماس با ما» deep-links to the
+   * contact block on the about page rather than getting a route of its own:
+   * the brand has one short story and one set of contact details, which is a
+   * page, not two (§19 — do not force five pages if the content needs fewer).
+   *
+   * Hrefs are written from the site root so the header works on every page —
+   * a bare `#contact` resolves against whatever page the header happens to be
+   * rendered on, which is nothing at all outside the homepage.
    */
   nav: [
     { label: "محصولات", href: "/products/" },
     { label: "گالری", href: "/gallery/" },
-    { label: "دربارهٔ ما", href: "/#brand" },
-    { label: "تماس با ما", href: "/#contact" },
+    { label: "دربارهٔ ما", href: "/about/" },
+    { label: "تماس با ما", href: "/about/#contact" },
   ],
 
-  headerCta: { label: "دریافت مشاوره", href: "/#contact" },
+  headerCta: { label: "دریافت مشاوره", href: "/about/#contact" },
 
   contact: {
     city: "تهران",
@@ -49,18 +70,25 @@ export const site: SiteContent = {
      */
     whatsapp: "989000000000",
     email: "hello@parnian.example",
+    /** Secondary inquiry path (§42), for brand-discovery rather than a product question. */
+    instagram: { handle: `@${HANDLE}`, href: social.instagram.href },
   },
 
-  social: [
-    { label: "اینستاگرام", href: "#" },
-    { label: "تلگرام", href: "#" },
-    { label: "پینترست", href: "#" },
-  ],
+  social: [social.instagram, social.telegram, social.pinterest],
 
-  legal: [
-    { label: "حریم خصوصی", href: "#" },
-    { label: "شرایط استفاده", href: "#" },
-  ],
+  /**
+   * Empty on purpose, and the footer hides the row while it is.
+   *
+   * These were «حریم خصوصی» and «شرایط استفاده» pointing at `href="#"` — links
+   * that focus like links and jump the reader to the top of the page. The fix
+   * is not to write the pages: a privacy policy and terms of use are the one
+   * category of content where inventing plausible text is actively harmful,
+   * and §44.1 rules out far less consequential fabrications than that.
+   *
+   * Add real entries here when real policies exist and the row comes back with
+   * no change to any component.
+   */
+  legal: [],
 
   newsletter: {
     heading: "خبرنامه",

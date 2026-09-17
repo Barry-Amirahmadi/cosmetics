@@ -4,15 +4,19 @@ import { Reveal } from "@/components/motion/Reveal";
 import { ArrowLead } from "@/components/ui/ArrowLead";
 
 /**
- * Footer, and the site's contact block — the nav's "تماس با ما" and the closing
- * call to action both land here, so this is where the details have to be real.
+ * Footer — a colophon, and a convenience copy of the contact details.
+ *
+ * It carried `id="contact"` through Phase 01 because there was nowhere else for
+ * «تماس با ما» to land. The about page now owns that anchor; the footer renders
+ * on that page too, so keeping the id here would put two elements on one page
+ * answering to the same name.
  *
  * The oversized wordmark at the bottom is the one purely graphic element on the
  * page: it closes the document the way a colophon closes a book.
  */
 export function Footer() {
   return (
-    <footer id="contact" className="ground-dark on-dark">
+    <footer className="ground-dark on-dark">
       <div className="container py-[var(--section-y-tight)]">
         <div className="grid-editorial">
           {/* Brand line */}
@@ -107,21 +111,32 @@ export function Footer() {
           <ul className="flex flex-wrap items-center gap-x-6">
             {site.social.map((item) => (
               <li key={item.label}>
-                <a href={item.href} className="t-meta footer-link">
+                {/* These leave the site now that they point at real profile
+                    URLs rather than at "#". */}
+                <a
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="t-meta footer-link"
+                >
                   {item.label}
                 </a>
               </li>
             ))}
           </ul>
-          <ul className="flex flex-wrap items-center gap-x-6">
-            {site.legal.map((item) => (
-              <li key={item.label}>
-                <a href={item.href} className="t-meta footer-link">
-                  {item.label}
-                </a>
-              </li>
-            ))}
-          </ul>
+          {/* Rendered only when there is something to render — an empty list
+              would otherwise leave a bare flex child holding the row open. */}
+          {site.legal.length > 0 ? (
+            <ul className="flex flex-wrap items-center gap-x-6">
+              {site.legal.map((item) => (
+                <li key={item.label}>
+                  <a href={item.href} className="t-meta footer-link">
+                    {item.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          ) : null}
         </div>
 
         {/* Colophon */}

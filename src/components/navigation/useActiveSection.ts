@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 /**
@@ -7,9 +8,22 @@ import { useEffect, useState } from "react";
  * mark it. The trigger band is the upper third of the viewport: a section
  * counts as "current" once its start has scrolled past the header, which is
  * how a reader would describe it.
+ *
+ * The header lives in the layout and therefore survives navigation, so this has
+ * to re-observe on every route change: the sections it is looking for exist on
+ * one page and not on another, and an observer set up where they did not exist
+ * would stay empty for the rest of the session.
+ *
+ * The result is stored together with the path it was measured on, and returned
+ * only when they still match. That way a value left over from the previous page
+ * is ignored without clearing state from inside an effect.
  */
 export function useActiveSection(ids: string[]) {
-  const [active, setActive] = useState<string | null>(null);
+  const pathname = usePathname();
+  const [entry, setEntry] = useState<{ path: string; id: string | null }>({
+    path: pathname,
+    id: null,
+  });
 
   useEffect(() => {
     if (typeof IntersectionObserver === "undefined") return;
@@ -23,8 +37,8 @@ export function useActiveSection(ids: string[]) {
 
     const observer = new IntersectionObserver(
       (entries) => {
-        for (const entry of entries) {
-          visible.set(entry.target.id, entry.isIntersecting ? entry.intersectionRatio : 0);
+        for (const item of entries) {
+          visible.set(item.target.id, item.isIntersecting ? item.intersectionRatio : 0);
         }
         let best: string | null = null;
         let bestRatio = 0;
@@ -34,14 +48,14 @@ export function useActiveSection(ids: string[]) {
             bestRatio = ratio;
           }
         }
-        setActive(best);
+        setEntry({ path: pathname, id: best });
       },
       { threshold: [0, 0.25, 0.5, 0.75], rootMargin: "-20% 0px -40% 0px" },
     );
 
     nodes.forEach((n) => observer.observe(n));
     return () => observer.disconnect();
-  }, [ids]);
+  }, [ids, pathname]);
 
-  return active;
+  return entry.path === pathname ? entry.id : null;
 }

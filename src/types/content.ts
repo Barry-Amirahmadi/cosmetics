@@ -133,6 +133,8 @@ export interface SiteContent {
     /** WhatsApp click-to-chat number, Latin digits only, no punctuation. */
     whatsapp: string;
     email: string;
+    /** Secondary inquiry path (§42). `handle` is what a reader sees. */
+    instagram: { handle: string; href: string };
   };
   social: NavItem[];
   legal: NavItem[];

@@ -114,7 +114,12 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
         <ul className="flex flex-wrap gap-x-6">
           {site.social.map((item) => (
             <li key={item.label}>
-              <a href={item.href} className="t-meta footer-link">
+              <a
+                href={item.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="t-meta footer-link"
+              >
                 {item.label}
               </a>
             </li>

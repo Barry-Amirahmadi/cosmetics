@@ -96,6 +96,9 @@ export const inquiry = {
   label: "پرسش دربارهٔ این محصول",
   /** `{product}` is replaced with the product name at render time. */
   message: "سلام. دربارهٔ «{product}» سؤال داشتم.",
+  /** The same channel without a product in hand — used on the about page. */
+  generalLabel: "نوشتن در واتساپ",
+  generalMessage: "سلام. سؤالی دربارهٔ محصول‌های پرنیان داشتم.",
   /** Appended for screen readers to any link that leaves the site. */
   newWindow: "در پنجرهٔ تازه باز می‌شود",
 };
@@ -161,11 +164,63 @@ export const galleryPage = {
   },
 };
 
+/**
+ * About page.
+ *
+ * Short on purpose. There is no founding year, no founder, no laboratory, no
+ * "since" — none of that has been supplied, and a portfolio piece that invents
+ * a company history to fill an about page is making the §44.1 mistake in prose
+ * instead of in data. What is written here is *position*: how the brand decides
+ * what to make, which is something a brand can assert about itself.
+ *
+ * It is also not a restatement of the four values on the homepage. Those say
+ * what the brand holds to; this says why the collection stays the size it is.
+ */
+export const about = {
+  eyebrow: "دربارهٔ ما",
+  heading: "چرا مجموعه کوچک است",
+  lead: "مجموعهٔ پرنیان کوچک است و قرار نیست هر فصل بزرگ‌تر شود. دلیلش را اینجا نوشته‌ایم.",
+  body: [
+    "بیشتر برندهای مراقبت از پوست با افزودن محصول رشد می‌کنند. ما تصمیم گرفتیم با بازبینی رشد کنیم: هر فرمولی که در مجموعه می‌ماند دوباره خوانده می‌شود، و اگر جای بهتری برایش پیدا نکنیم، همان‌طور می‌ماند.",
+    "این یعنی گاهی ماه‌ها چیز تازه‌ای منتشر نمی‌شود. برای ما این نشانهٔ کندی نیست؛ نشانهٔ این است که جای خالی واقعی پیدا نکرده‌ایم.",
+    "مجموعه‌ای که کوچک می‌ماند یعنی می‌توانیم هر محصول را بشناسیم — و یعنی شما هم می‌توانید. چند نام را می‌شود به خاطر سپرد؛ پنجاه‌تا را نه.",
+  ],
+  image: {
+    src: "/media/gallery-04.svg",
+    alt: "گوشه‌ای از میز کار پرنیان در نور صبح",
+    ratio: "4/3",
+  } satisfies MediaAsset,
+  seo: {
+    title: "دربارهٔ ما",
+    description: "چرا مجموعهٔ پرنیان کوچک است، و چطور می‌توانید با ما تماس بگیرید.",
+  },
+};
+
+/**
+ * Contact block — the inquiry architecture of §42, in full.
+ *
+ * WhatsApp first, Instagram second, then the direct details. No form: a form
+ * needs a third-party backend to post to, and wiring a real hosted endpoint is
+ * outside what a presented template needs (§51). The mechanism that exists is
+ * the one the product pages already use.
+ */
+export const contact = {
+  eyebrow: "تماس",
+  heading: "ساده‌ترین راه، پیام مستقیم است",
+  lead: "برای پرسش دربارهٔ محصول‌ها یا انتخاب روتین، در واتساپ بنویسید.",
+  instagramLabel: "اینستاگرام",
+  labels: {
+    city: "شهر",
+    phone: "تلفن",
+    email: "ایمیل",
+  },
+};
+
 export const cta = {
   eyebrow: "شروع کنید",
   heading: "نمی‌دانید از کجا شروع کنید؟",
   body: "چند پرسش کوتاه دربارهٔ پوست و روتین فعلی‌تان کافی است تا مشخص شود کدام محصول‌ها به کارتان می‌آیند.",
-  primary: { label: "دریافت مشاوره", href: "/#contact" },
+  primary: { label: "دریافت مشاوره", href: "/about/#contact" },
   secondary: { label: "مشاهدهٔ محصولات", href: "/products/" },
   image: {
     src: "/media/cta-field.svg",
