@@ -2,10 +2,13 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { publishedProducts, products } from "@/content/products";
 import { relatedProducts } from "@/content/relatedProducts";
+import { productSchema } from "@/content/schema";
+import { pageMetadata } from "@/lib/seo";
 import { ProductHero } from "@/components/products/ProductHero";
 import { ProductDetails } from "@/components/products/ProductDetails";
 import { RelatedProducts } from "@/components/products/RelatedProducts";
 import { CtaSection } from "@/components/sections/CtaSection";
+import { JsonLd } from "@/components/seo/JsonLd";
 
 /**
  * Product detail.
@@ -33,10 +36,20 @@ export async function generateMetadata({
   const product = products.find((p) => p.slug === slug);
   if (!product) return {};
 
-  return {
+  return pageMetadata({
     title: product.seo?.title ?? product.name,
-    description: product.seo?.description ?? product.statement ?? product.description,
-  };
+    /**
+     * Statement *and* description, not one or the other. Either alone is about
+     * fifty characters — a search snippet gets truncated at roughly a hundred
+     * and sixty, and both sentences together are what the brand already says
+     * about the product, so this reads as a description rather than a fragment.
+     * Nothing is composed that the copy deck does not contain.
+     */
+    description:
+      product.seo?.description ??
+      [product.statement, product.description].filter(Boolean).join(" "),
+    path: `/products/${product.slug}/`,
+  });
 }
 
 export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -55,6 +68,10 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           consultation. Its secondary link points at the collection, which the
           breadcrumb and the hero already offer from here. */}
       <CtaSection secondary={null} />
+
+      {/* Product structured data. Deliberately carries no `offers` — see
+          src/content/schema.ts for what is left out and why. */}
+      <JsonLd data={productSchema(product)} />
     </>
   );
 }

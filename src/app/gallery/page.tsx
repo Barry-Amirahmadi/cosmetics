@@ -1,5 +1,5 @@
-import type { Metadata } from "next";
 import { sortedGallery } from "@/content/gallery";
+import { pageMetadata } from "@/lib/seo";
 import { galleryPage } from "@/content/sections";
 import { Section } from "@/components/layout/Section";
 import { SectionHeading } from "@/components/layout/SectionHeading";
@@ -17,10 +17,11 @@ import { CtaSection } from "@/components/sections/CtaSection";
  * product pages: from the gallery, «مشاهدهٔ محصولات» is a real onward step
  * rather than a link back to where the reader already is.
  */
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: galleryPage.seo.title,
   description: galleryPage.seo.description,
-};
+  path: "/gallery/",
+});
 
 export default function GalleryPage() {
   return (

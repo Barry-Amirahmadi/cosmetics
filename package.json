@@ -14,7 +14,8 @@
     "typecheck": "tsc --noEmit",
     "test:smoke": "playwright test",
     "check:viewports": "node scripts/check-viewports.mjs",
-    "media": "node scripts/generate-media.mjs"
+    "media": "node scripts/generate-media.mjs",
+    "og": "node scripts/generate-og.mjs"
   },
   "dependencies": {
     "next": "16.3.5",

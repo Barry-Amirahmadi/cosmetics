@@ -128,8 +128,14 @@ export interface SiteContent {
   seo: {
     /** The homepage <title>, and the fallback for any route without its own. */
     title: string;
-    /** `%s` is the route's own title — Next substitutes it. */
+    /** `%s` is the route's own title. */
     titleTemplate: string;
+    /** The homepage meta description. Longer than `brand.line`, which is a
+     *  display string and too short to be a useful search snippet. */
+    description: string;
+    /** The share card. `src` is root-relative; the absolute URL is composed
+     *  at build time, because Open Graph requires one. */
+    ogImage: { src: string; alt: string; width: number; height: number };
   };
   nav: NavItem[];
   headerCta: NavItem;

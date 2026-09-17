@@ -1,3 +1,5 @@
+import { site } from "@/content/site";
+import { pageMetadata } from "@/lib/seo";
 import { Hero } from "@/components/hero/Hero";
 import { Statement } from "@/components/sections/Statement";
 import { ProductShowcase } from "@/components/products/ProductShowcase";
@@ -18,6 +20,12 @@ import { CtaSection } from "@/components/sections/CtaSection";
  *   CTA        darkest, display type over photography, loudest point
  *   Footer     dark,   colophon
  */
+/** No `title`: the homepage *is* the site title, not a page within it. */
+export const metadata = pageMetadata({
+  description: site.seo.description,
+  path: "/",
+});
+
 export default function HomePage() {
   return (
     <>

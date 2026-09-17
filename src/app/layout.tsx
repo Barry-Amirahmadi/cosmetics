@@ -2,8 +2,11 @@ import type { Metadata, Viewport } from "next";
 import { Markazi_Text, Vazirmatn } from "next/font/google";
 import { site } from "@/content/site";
 import { ui } from "@/content/ui";
+import { organizationSchema } from "@/content/schema";
+import { siteRoot } from "@/lib/seo";
 import { Header } from "@/components/navigation/Header";
 import { Footer } from "@/components/layout/Footer";
+import { JsonLd } from "@/components/seo/JsonLd";
 import "./globals.css";
 
 /**
@@ -14,6 +17,23 @@ import "./globals.css";
  *
  * Markazi Text — Persian Naskh with calligraphic contrast. Display only.
  * Vazirmatn    — neutral Persian sans. Everything else.
+ *
+ * **Both subsets on both faces. Do not "optimise" Markazi down to `arabic`** —
+ * that was tried in Phase 04 and measured, and it makes the page slower.
+ *
+ * The reasoning that suggests it is sound and wrong: nothing on this site sets
+ * Latin in the display face, because the Latin half of the wordmark and every
+ * micro-label are `.t-label`, which is `--font-body`. Walking all six routes
+ * for an element computing to Markazi with Latin text in it finds none.
+ *
+ * But Google splits these faces by unicode range, and Markazi's `arabic` subset
+ * covers `U+0600-06FF` and friends — **it does not contain `U+0020`**. The space
+ * character, the em-dash and the rest of general punctuation live in the `latin`
+ * subset. Every Persian heading on the site has spaces in it, so the browser
+ * downloads that file either way. Dropping the subset only removes its
+ * `<link rel="preload">`, turning an early parallel fetch into a late one
+ * discovered after layout — the same bytes, arriving in time to cause a visible
+ * swap on the largest type on the page.
  */
 const markazi = Markazi_Text({
   subsets: ["arabic", "latin"],
@@ -28,28 +48,21 @@ const vazirmatn = Vazirmatn({
 });
 
 /**
- * Absolute origin for Open Graph and canonical URLs. Supplied by the deploy
- * workflow from `actions/configure-pages`, which knows where the site actually
- * lives; the local default is a placeholder and is never published.
+ * Site-wide defaults only. Every route composes its own title, description,
+ * canonical and social card through `pageMetadata` — see `src/lib/seo.ts` for
+ * why that is centralised rather than written per page.
+ *
+ * `metadataBase` carries the base path, unlike the bare origin the deploy
+ * workflow supplies, so any relative URL Next resolves for itself lands inside
+ * the deployed site rather than at the root of the host.
  */
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://parnian.example";
-
 export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
+  metadataBase: new URL(`${siteRoot}/`),
   title: {
     default: site.seo.title,
     template: site.seo.titleTemplate,
   },
-  description: site.brand.line,
-  openGraph: {
-    type: "website",
-    locale: "fa_IR",
-    siteName: site.brand.name,
-    title: site.seo.title,
-    description: site.brand.line,
-  },
-  // Canonical URLs, structured data, sitemap and robots are Phase 02, once the
-  // real domain and page set exist. The markup below is already shaped for them.
+  description: site.seo.description,
 };
 
 export const viewport: Viewport = {
@@ -84,6 +97,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Header />
         <main id="main">{children}</main>
         <Footer />
+
+        {/* Brand-level structured data, on every page because the organisation
+            is a property of the site rather than of any one route. */}
+        <JsonLd data={organizationSchema()} />
       </body>
     </html>
   );

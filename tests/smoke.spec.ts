@@ -309,6 +309,115 @@ test("the about page owns the contact anchor and both inquiry paths", async ({ p
   expect(consoleErrors, "console errors").toEqual([]);
 });
 
+test("every route carries its own metadata, under the deployed base path", async ({ page }) => {
+  const routes = [
+    "/",
+    "/products/",
+    "/gallery/",
+    "/about/",
+    "/products/shab/",
+    "/products/aram/",
+  ];
+
+  const seen = new Map<string, string[]>();
+
+  for (const route of routes) {
+    await page.goto(`${BASE}${route}`);
+
+    const meta = await page.evaluate(() => ({
+      title: document.title,
+      description: document
+        .querySelector('meta[name="description"]')
+        ?.getAttribute("content"),
+      canonical: document.querySelector('link[rel="canonical"]')?.getAttribute("href"),
+      ogTitle: document.querySelector('meta[property="og:title"]')?.getAttribute("content"),
+      ogUrl: document.querySelector('meta[property="og:url"]')?.getAttribute("content"),
+      ogImage: document.querySelector('meta[property="og:image"]')?.getAttribute("content"),
+    }));
+
+    expect(meta.title, `${route} title`).toBeTruthy();
+    expect(meta.description, `${route} description`).toBeTruthy();
+
+    // og:title was set once in the root layout and inherited by every route, so
+    // a shared link to any page previewed as the homepage.
+    expect(meta.ogTitle, `${route} og:title matches the page title`).toBe(meta.title);
+
+    // The canonical has to carry the base path. `configure-pages` reports the
+    // origin and the base path as two separate values, and a canonical built
+    // from the origin alone points at someone else's site — which actively
+    // tells a search engine to index that one instead of this one.
+    for (const [name, value] of [
+      ["canonical", meta.canonical],
+      ["og:url", meta.ogUrl],
+      ["og:image", meta.ogImage],
+    ] as const) {
+      expect(value, `${route} ${name} is absolute`).toMatch(/^https?:\/\//);
+      if (BASE) expect(value, `${route} ${name} carries the base path`).toContain(`${BASE}/`);
+    }
+
+    expect(new URL(meta.canonical!).pathname, `${route} canonical points at itself`).toBe(
+      `${BASE}${route}`,
+    );
+
+    for (const [field, value] of Object.entries(meta)) {
+      if (field === "ogImage") continue; // one card, shared by every route on purpose
+      const list = seen.get(field) ?? [];
+      expect(list, `${route} ${field} is unique across routes`).not.toContain(value);
+      list.push(value as string);
+      seen.set(field, list);
+    }
+  }
+});
+
+test("the sitemap and robots.txt are exported and absolute", async ({ page }) => {
+  const sitemap = await page.request.get(`${BASE}/sitemap.xml`);
+  expect(sitemap.status()).toBe(200);
+  const xml = await sitemap.text();
+
+  // Every exported route must be listed, and every entry absolute — a relative
+  // <loc> is invalid in a sitemap and is dropped silently.
+  for (const route of ["/", "/products/", "/gallery/", "/about/", "/products/shab/"]) {
+    expect(xml, `sitemap lists ${route}`).toContain(`${BASE}${route}</loc>`);
+  }
+  expect(xml.match(/<loc>/g)?.length, "sitemap entry count").toBe(9);
+  expect(xml, "no relative loc").not.toMatch(/<loc>\//);
+
+  // Drafts are filtered out of publishedProducts and must not be advertised.
+  expect(xml, "no draft product").not.toContain("/404");
+
+  const robots = await page.request.get(`${BASE}/robots.txt`);
+  expect(robots.status()).toBe(200);
+  expect(await robots.text(), "robots points at the sitemap").toContain(
+    `${BASE}/sitemap.xml`,
+  );
+});
+
+test("structured data parses and claims nothing invented", async ({ page }) => {
+  await page.goto(`${BASE}/products/shab/`);
+
+  const blocks = await page
+    .locator('script[type="application/ld+json"]')
+    .evaluateAll((els) => els.map((el) => el.textContent ?? ""));
+  expect(blocks.length, "Organization + Product").toBe(2);
+
+  const parsed = blocks.map((b) => JSON.parse(b) as Record<string, unknown>);
+  const product = parsed.find((p) => p["@type"] === "Product")!;
+  const organization = parsed.find((p) => p["@type"] === "Organization")!;
+
+  expect(product.name).toBe("سرم شب");
+  expect(String(product.url)).toContain(`${BASE}/products/shab/`);
+
+  // The point of the schema file: it must stay a mapping of data that exists.
+  // `offers` and a rating are what a generator would invent to earn a rich
+  // result, and this site has no commerce and no reviews at all.
+  for (const field of ["offers", "aggregateRating", "review", "sku", "gtin"]) {
+    expect(product[field], `Product must not assert ${field}`).toBeUndefined();
+  }
+  // The social handles are `.example` placeholders; sameAs would claim the
+  // brand owns accounts that do not resolve.
+  expect(organization.sameAs, "Organization must not assert sameAs").toBeUndefined();
+});
+
 test("an unknown path serves the styled 404", async ({ page }) => {
   const response = await page.goto(`${BASE}/definitely-not-a-page/`);
 

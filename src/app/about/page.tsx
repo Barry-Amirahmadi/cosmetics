@@ -1,5 +1,5 @@
-import type { Metadata } from "next";
 import { about } from "@/content/sections";
+import { pageMetadata } from "@/lib/seo";
 import { BrandStory } from "@/components/sections/BrandStory";
 import { ContactSection } from "@/components/sections/ContactSection";
 
@@ -15,10 +15,11 @@ import { ContactSection } from "@/components/sections/ContactSection";
  * No closing CtaSection here, unlike every other page: that band's whole job is
  * to send a reader to the contact block, and this *is* the contact block.
  */
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: about.seo.title,
   description: about.seo.description,
-};
+  path: "/about/",
+});
 
 export default function AboutPage() {
   return (

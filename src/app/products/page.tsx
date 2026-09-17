@@ -1,5 +1,5 @@
-import type { Metadata } from "next";
 import { publishedProducts } from "@/content/products";
+import { pageMetadata } from "@/lib/seo";
 import { collectCategories } from "@/content/categories";
 import { collection } from "@/content/sections";
 import { Section } from "@/components/layout/Section";
@@ -23,10 +23,11 @@ import { CtaSection } from "@/components/sections/CtaSection";
  * single-product categories, grouping would produce five headed groups of one —
  * the repeated-row template the whole design exists to avoid.
  */
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: collection.seo.title,
   description: collection.seo.description,
-};
+  path: "/products/",
+});
 
 export default function CollectionPage() {
   const products = publishedProducts;
