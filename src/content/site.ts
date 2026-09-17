@@ -18,16 +18,15 @@ export const site: SiteContent = {
   /**
    * Navigation, mid-migration by design.
    *
-   * «محصولات» is a real route now that the collection page exists; گالری,
-   * دربارهٔ ما and تماس با ما are still homepage sections and stay as
-   * root-relative in-page targets until Phase 02 tasks 5 and 6 give them pages
-   * of their own. Writing them as `/#gallery` rather than `#gallery` is what
-   * makes them work from `/products/` as well as from `/` — a bare hash
+   * «محصولات» and «گالری» are real routes; دربارهٔ ما and تماس با ما are still
+   * homepage sections and stay as root-relative in-page targets until Phase 02
+   * task 6 gives them a page. Writing those as `/#brand` rather than `#brand`
+   * is what makes them work from `/products/` as well as from `/` — a bare hash
    * resolves against whatever page the header happens to be rendered on.
    */
   nav: [
     { label: "محصولات", href: "/products/" },
-    { label: "گالری", href: "/#gallery" },
+    { label: "گالری", href: "/gallery/" },
     { label: "دربارهٔ ما", href: "/#brand" },
     { label: "تماس با ما", href: "/#contact" },
   ],

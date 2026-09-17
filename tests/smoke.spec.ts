@@ -187,6 +187,53 @@ test("the collection page lists the catalogue and its index resolves", async ({ 
   expect(consoleErrors, "console errors").toEqual([]);
 });
 
+test("the gallery page composes every plate and opens the right one", async ({ page }) => {
+  const { consoleErrors, failed } = watch(page);
+
+  const response = await page.goto(`${BASE}/gallery/`);
+  expect(response?.status()).toBe(200);
+
+  await expect(page.locator("h1")).toHaveText("تصویرها، بی‌عجله");
+  await expect(
+    page.locator('header nav[aria-label="پیمایش اصلی"] a[aria-current="page"]'),
+  ).toHaveText("گالری");
+
+  // Every image must survive the banding. A composition that drops the last
+  // item when the count is odd loses it silently.
+  const tiles = page.locator(".ground-light-deep .gallery-tile");
+  const count = await tiles.count();
+  expect(count).toBeGreaterThan(0);
+
+  // The plates are laid out in bands, so each tile has a position within its
+  // band *and* a position in the gallery. The lightbox needs the second one —
+  // passing the band-local index opens the wrong picture, which looks like a
+  // working lightbox rather than like a bug.
+  const third = tiles.nth(2);
+  await third.scrollIntoViewIfNeeded();
+  await third.click();
+  const dialog = page.locator("dialog.lightbox");
+  await expect(dialog).toHaveJSProperty("open", true);
+  await expect(dialog.locator(".t-h3")).toHaveText("سرم شب");
+
+  await page.keyboard.press("Escape");
+  await expect(dialog).toHaveJSProperty("open", false);
+
+  const broken = await page.evaluate(
+    () =>
+      [...document.querySelectorAll("img")].filter((i) => i.complete && i.naturalWidth === 0)
+        .length,
+  );
+  expect(broken, "images failing to load").toBe(0);
+
+  const overflows = await page.evaluate(
+    () => document.documentElement.scrollWidth > window.innerWidth + 1,
+  );
+  expect(overflows, "horizontal overflow").toBe(false);
+
+  expect(failed, "failed requests").toEqual([]);
+  expect(consoleErrors, "console errors").toEqual([]);
+});
+
 test("an unknown path serves the styled 404", async ({ page }) => {
   const response = await page.goto(`${BASE}/definitely-not-a-page/`);
 

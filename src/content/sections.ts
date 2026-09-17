@@ -139,6 +139,26 @@ export const gallery = {
   heading: "نگاهی از نزدیک",
   lead: "بافت‌ها، بسته‌بندی و فضای کار — بدون اصلاح رنگ.",
   viewLabel: "بزرگ‌نمایی",
+  /** The way out of the homepage band and into the full gallery. */
+  allLabel: "صفحهٔ گالری",
+  allHref: "/gallery/",
+};
+
+/**
+ * Gallery page.
+ *
+ * Same six images as the homepage band, and the difference is scale rather than
+ * content: the homepage shows them as a wall of tiles, this shows them as
+ * plates. The copy says so plainly instead of pretending there is more here.
+ */
+export const galleryPage = {
+  eyebrow: "گالری",
+  heading: "تصویرها، بی‌عجله",
+  lead: "همان تصویرها، بزرگ‌تر از آنچه در صفحهٔ اصلی جا می‌شود. برای تمام‌صفحه، روی هر کدام بزنید.",
+  seo: {
+    title: "گالری",
+    description: "تصویرهای مجموعهٔ پرنیان — بافت‌ها، بسته‌بندی و فضای کار.",
+  },
 };
 
 export const cta = {

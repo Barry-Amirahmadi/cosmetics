@@ -5,6 +5,7 @@ import { sortedGallery } from "@/content/gallery";
 import { gallery } from "@/content/sections";
 import { SectionHeading } from "@/components/layout/SectionHeading";
 import { Reveal } from "@/components/motion/Reveal";
+import { Button } from "@/components/ui/Button";
 import { GalleryTile } from "./GalleryTile";
 import { GalleryLightbox } from "./GalleryLightbox";
 
@@ -76,6 +77,14 @@ export function Gallery() {
             })}
           </div>
         ))}
+
+        {/* Into the full gallery, for a reader who wants the images larger.
+            Same role as the link that closes the product showcase. */}
+        <Reveal className="mt-[var(--section-y-tight)]">
+          <Button href={gallery.allHref} variant="secondary">
+            {gallery.allLabel}
+          </Button>
+        </Reveal>
       </div>
 
       <GalleryLightbox
