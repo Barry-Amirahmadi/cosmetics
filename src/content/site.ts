@@ -118,12 +118,5 @@ export const site: SiteContent = {
     contactHeading: "تماس",
   },
 
-  newsletter: {
-    heading: "خبرنامه",
-    body: "هر چند هفته یک بار، وقتی محصول تازه‌ای به مجموعه اضافه می‌شود.",
-    placeholder: "نشانی ایمیل",
-    action: "عضویت",
-  },
-
   copyright: "© ۱۴۰۵ پرنیان — تمام حقوق محفوظ است.",
 };

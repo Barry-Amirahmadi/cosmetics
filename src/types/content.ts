@@ -159,12 +159,6 @@ export interface SiteContent {
     navHeading: string;
     contactHeading: string;
   };
-  newsletter: {
-    heading: string;
-    body: string;
-    placeholder: string;
-    action: string;
-  };
   copyright: string;
 }
 

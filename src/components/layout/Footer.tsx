@@ -2,7 +2,6 @@ import Link from "next/link";
 import { site } from "@/content/site";
 import { ui } from "@/content/ui";
 import { Reveal } from "@/components/motion/Reveal";
-import { ArrowLead } from "@/components/ui/ArrowLead";
 
 /**
  * Footer — a colophon, and a convenience copy of the contact details.
@@ -14,6 +13,17 @@ import { ArrowLead } from "@/components/ui/ArrowLead";
  *
  * The oversized wordmark at the bottom is the one purely graphic element on the
  * page: it closes the document the way a colophon closes a book.
+ *
+ * **There is deliberately no newsletter signup here, and re-adding one needs a
+ * backend first.** Phase 01 shipped the field with `action="#"` and no method,
+ * which the final pass measured: submitting reloaded the page, lost the scroll
+ * position, put the visitor's typed email address into the URL — and so into
+ * browser history and any outgoing referrer — and showed no confirmation at
+ * all. §42 allows a form only when it posts to a third-party static-compatible
+ * backend, and there is none to post to for a brand that does not exist, so the
+ * block was removed rather than faked. The row is three columns across twelve
+ * now, anchored at both edges; that spacing is what the removal left, not a
+ * separate design change.
  */
 export function Footer() {
   return (
@@ -30,7 +40,7 @@ export function Footer() {
 
           {/* Navigation */}
           <nav
-            className="col-span-2 md:col-span-4 lg:col-start-6 lg:col-span-2"
+            className="col-span-2 md:col-span-4 lg:col-start-7 lg:col-span-2"
             aria-label={ui.nav.footer}
           >
             <Reveal delay={60}>
@@ -48,7 +58,7 @@ export function Footer() {
           </nav>
 
           {/* Contact */}
-          <div className="col-span-2 md:col-span-4 lg:col-span-2">
+          <div className="col-span-2 md:col-span-4 lg:col-start-10 lg:col-span-3">
             <Reveal delay={120}>
               <h2 className="t-label mb-5">{site.footer.contactHeading}</h2>
               <ul className="flex flex-col">
@@ -71,41 +81,6 @@ export function Footer() {
                   </a>
                 </li>
               </ul>
-            </Reveal>
-          </div>
-
-          {/* Newsletter */}
-          <div className="col-span-4 md:col-span-8 lg:col-start-10 lg:col-span-3">
-            <Reveal delay={180}>
-              <h2 className="t-label mb-5">{site.newsletter.heading}</h2>
-              <p className="t-meta mb-4 max-w-[30ch]">{site.newsletter.body}</p>
-              <form
-                className="field"
-                action="#"
-                /* Wired to nothing in Phase 01 — the subscribe endpoint is a
-                   Phase 02 decision, so the markup is here and the submit is not. */
-              >
-                <label htmlFor="newsletter-email" className="sr-only">
-                  {site.newsletter.placeholder}
-                </label>
-                <input
-                  id="newsletter-email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  placeholder={site.newsletter.placeholder}
-                  className="field__input"
-                  /* auto, not ltr: the Persian placeholder reads right-to-left
-                     while a typed Latin address flips to left-to-right. */
-                  dir="auto"
-                />
-                <button type="submit" className="field__submit">
-                  <span className="inline-flex items-center gap-2">
-                    {site.newsletter.action}
-                    <ArrowLead size={14} />
-                  </span>
-                </button>
-              </form>
             </Reveal>
           </div>
         </div>

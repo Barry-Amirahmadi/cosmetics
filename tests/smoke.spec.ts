@@ -475,3 +475,31 @@ test("an unknown path serves the styled 404", async ({ page }) => {
   expect(response?.status()).toBe(404);
   await expect(page.locator("h1")).toHaveText("این نشانی وجود ندارد");
 });
+
+/**
+ * A form with nowhere to post is worse than no form: on a static host the
+ * browser falls back to a GET at the current URL, so the page reloads, the
+ * scroll position is lost, and whatever the visitor typed — an email address,
+ * here — is written into the URL and therefore into history and any outgoing
+ * referrer. The footer shipped exactly that from Phase 01 until the final pass
+ * measured it. §42 permits a form only when it posts to a real third-party
+ * backend, so this asserts the site has no form that resolves to neither.
+ */
+test("no route carries a form that submits nowhere", async ({ page }) => {
+  const routes = ["/", "/products/", "/gallery/", "/about/", "/products/shab/"];
+
+  for (const route of routes) {
+    await page.goto(`${BASE}${route}`);
+
+    const dead = await page.evaluate(() =>
+      [...document.querySelectorAll("form")]
+        .filter((f) => {
+          const action = f.getAttribute("action");
+          return action === null || action === "" || action === "#";
+        })
+        .map((f) => f.className || "(no class)"),
+    );
+
+    expect(dead, `${route} has a form posting nowhere`).toEqual([]);
+  }
+});
