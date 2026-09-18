@@ -8,11 +8,21 @@ import { cn } from "@/lib/cn";
  * transliteration as a tracked micro-label beside it. Tracking is applied to
  * the Latin only — the Persian never carries letter-spacing.
  */
-export function Wordmark({ size = "sm", className }: { size?: "sm" | "lg"; className?: string }) {
+export function Wordmark({
+  size = "sm",
+  className,
+  onClick,
+}: {
+  size?: "sm" | "lg";
+  className?: string;
+  /** Present so the copy inside the mobile panel can close it on the way out. */
+  onClick?: () => void;
+}) {
   return (
     <Link
       href="/"
       className={cn("inline-flex min-h-11 items-center gap-3", className)}
+      onClick={onClick}
       aria-label={`${site.brand.name} — ${ui.nav.home}`}
     >
       <span

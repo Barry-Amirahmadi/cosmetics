@@ -45,8 +45,11 @@ export function Button({
   }
 
   if (href) {
+    // onClick is applied here as well as on the <button> below. It was declared
+    // and silently dropped for links, which is how the mobile menu's own CTA
+    // navigated without ever running the onClose it was given.
     return (
-      <Link href={href} className={classes}>
+      <Link href={href} className={classes} onClick={onClick}>
         {children}
       </Link>
     );

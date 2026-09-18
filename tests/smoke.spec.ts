@@ -418,6 +418,57 @@ test("structured data parses and claims nothing invented", async ({ page }) => {
   expect(organization.sameAs, "Organization must not assert sameAs").toBeUndefined();
 });
 
+/**
+ * Found in the Part 4 full-site pass, which is the only pass that ever left the
+ * mobile menu by a route rather than by the close button.
+ *
+ * Four of the six internal controls in the panel carried `onClick={onClose}`.
+ * The lockup and the CTA did not — and `Button` accepted an `onClick` it then
+ * dropped for links, so even passing one would not have helped. Tapping either
+ * navigated underneath a panel that stayed over the whole screen with
+ * `body { overflow: hidden }` still set, stranding a phone visitor on the
+ * site's primary mobile call to action.
+ *
+ * Asserted for every control rather than for the two that were broken: the
+ * defect is one control forgetting, so the check has to be the whole set.
+ */
+test("every control that leaves the mobile menu closes it", async ({ page }, testInfo) => {
+  // The toggle is `lg:hidden`; above that breakpoint the panel is not part of
+  // the interface at all, so this is a mobile-project test by nature.
+  test.skip(
+    (testInfo.project.use.viewport?.width ?? 0) >= 1024,
+    "the mobile panel does not exist at desktop widths",
+  );
+
+  await page.goto(`${BASE}/`);
+
+  const panel = page.locator(".menu-panel");
+  const internal = page.locator('.menu-panel a[href^="/"]');
+
+  await page.locator(".menu-toggle").first().click();
+  await expect(panel).toHaveAttribute("data-open", "true");
+  const count = await internal.count();
+  expect(count, "the panel's own links").toBeGreaterThan(3);
+
+  for (let i = 0; i < count; i += 1) {
+    await page.goto(`${BASE}/`);
+    await page.locator(".menu-toggle").first().click();
+    await expect(panel).toHaveAttribute("data-open", "true");
+
+    const href = await internal.nth(i).getAttribute("href");
+    await internal.nth(i).click();
+
+    await expect(panel, `${href} left the panel open`).toHaveAttribute("data-open", "false");
+    // The panel locks page scrolling while it is open; a panel that closes
+    // without releasing that lock leaves a page nobody can scroll.
+    await expect
+      .poll(() => page.evaluate(() => document.body.style.overflow), {
+        message: `${href} left the page scroll-locked`,
+      })
+      .not.toBe("hidden");
+  }
+});
+
 test("an unknown path serves the styled 404", async ({ page }) => {
   const response = await page.goto(`${BASE}/definitely-not-a-page/`);
 

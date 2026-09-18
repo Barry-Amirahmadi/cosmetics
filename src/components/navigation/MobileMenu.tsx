@@ -77,7 +77,11 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
       aria-label={ui.nav.menuDialog}
     >
       <div className="container flex items-center justify-between py-5">
-        <Wordmark />
+        {/* Every control that leaves the panel closes it. The four nav links
+            below already did; the lockup and the CTA did not, so tapping
+            either navigated with the panel still covering the page and the
+            body still locked from scrolling. */}
+        <Wordmark onClick={onClose} />
         <button
           ref={closeRef}
           type="button"
@@ -112,7 +116,7 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
       </nav>
 
       <div className="container flex flex-col gap-6 pb-10 pt-8">
-        <Button href={site.headerCta.href} variant="primary" className="w-full">
+        <Button href={site.headerCta.href} variant="primary" className="w-full" onClick={onClose}>
           {site.headerCta.label}
         </Button>
         <ul className="flex flex-wrap gap-x-6">
