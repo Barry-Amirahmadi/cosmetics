@@ -3,7 +3,6 @@
 import { useState } from "react";
 import type { GalleryItem } from "@/types/content";
 import { toFa } from "@/lib/digits";
-import { cn } from "@/lib/cn";
 import { Reveal } from "@/components/motion/Reveal";
 import { GalleryTile } from "./GalleryTile";
 import { GalleryLightbox } from "./GalleryLightbox";
@@ -13,154 +12,58 @@ import { GalleryLightbox } from "./GalleryLightbox";
  *
  * The homepage band and this page show the same six images, and the difference
  * is deliberately one of *scale* rather than content: there, they are a wall of
- * tiles you glance across; here, they are plates you look at one at a time. The
- * band structure, the uneven top edge and the tile itself are all the homepage's
- * — this is the same visual language read larger, which is what §12 asks for.
+ * tiles you glance across; here, they are plates you look at one at a time.
+ * Three across becomes two across, and the plate grows from roughly 420px wide
+ * to roughly 640px on a 1440 screen.
  *
- * Where it does differ from the homepage is that the composition is generated
- * rather than tabulated. The homepage holds a fixed table of six placements,
- * which is correct for a fixed band but silently breaks on a seventh image.
- * Here the bands cycle — one plate, then a pair, then one, then a pair — so any
- * number of images composes, and the last band takes whatever is left.
- */
-
-/**
- * Solo bands alternate which edge they hug, so the page does not list — and a
- * tall crop takes fewer columns than a wide one.
+ * It used to compose itself instead — cycling solo bands and pairs, sizing each
+ * plate by its crop, alternating which edge a solo hugged and giving phones a
+ * third width again. Every one of those rules was individually defensible and
+ * the result was six plates at four sizes with a top edge that never settled,
+ * which reads as a page that could not decide rather than as a composition. One
+ * frame, repeated, is what makes six pictures look like one body of work.
  *
- * That second part is not decoration. A 4/5 crop across nine columns is 1220px
- * tall on a 1440 screen: taller than the window, so the plate can never be seen
- * whole, which is the one thing a gallery plate has to do. Sizing by crop keeps
- * every plate roughly the same height on screen instead of the same width.
+ * Nothing here is generated from the crop any more, so the old height argument
+ * is gone with it: at six columns a 4/5 plate is about 800px tall on a 1440
+ * screen and is seen whole, which is the one thing a gallery plate has to do.
+ * That holds because the catalogue now has a single ratio — see the note in
+ * `src/content/products.ts`. A mixed-ratio gallery would need this reconsidered.
+ *
+ * Any number of images composes, which the fixed table on the homepage cannot
+ * do: a seventh image simply starts a fourth row.
  */
-const SOLO = {
-  tall: [
-    { cls: "md:col-span-8 lg:col-span-6", sizes: "(max-width: 1024px) 100vw, 48vw" },
-    { cls: "md:col-span-8 lg:col-start-7 lg:col-span-6", sizes: "(max-width: 1024px) 100vw, 48vw" },
-  ],
-  wide: [
-    { cls: "md:col-span-8 lg:col-span-9", sizes: "(max-width: 1024px) 100vw, 70vw" },
-    { cls: "md:col-span-8 lg:col-start-4 lg:col-span-9", sizes: "(max-width: 1024px) 100vw, 70vw" },
-  ],
-} as const;
-
-/** Pairs alternate their proportions for the same reason. Six columns is the
- *  widest either half goes, for the height reason above. */
-const PAIRS = [
-  [
-    { cls: "md:col-span-4 lg:col-span-5", sizes: "(max-width: 1024px) 50vw, 40vw" },
-    {
-      cls: "md:col-span-4 lg:col-start-7 lg:col-span-6 lg:mt-28",
-      sizes: "(max-width: 1024px) 50vw, 48vw",
-    },
-  ],
-  [
-    { cls: "md:col-span-4 lg:col-span-6 lg:mt-20", sizes: "(max-width: 1024px) 50vw, 48vw" },
-    { cls: "md:col-span-4 lg:col-start-8 lg:col-span-5", sizes: "(max-width: 1024px) 50vw, 40vw" },
-  ],
-];
-
-/**
- * Whether a crop needs the narrower treatment. Square counts as tall: at nine
- * columns a 1/1 is 976px, over the fold on a laptop just as a portrait is.
- */
-function isTall(ratio: string): boolean {
-  const [w, h] = ratio.split("/").map(Number);
-  return w / h < 1.2;
-}
-
-interface Plate {
-  item: GalleryItem;
-  /** Position in the whole gallery — drives the plate number and the stagger. */
-  index: number;
-  cls: string;
-  sizes: string;
-}
-
-/**
- * On a phone the bands collapse, so the rhythm has to come from somewhere else:
- * the plates take alternating widths and edges instead, the treatment the
- * homepage gallery already uses to stop a single column reading as a stack of
- * equal rectangles (§12).
- */
-function mobileShape(index: number): string {
-  switch (index % 3) {
-    case 0:
-      return "";
-    case 1:
-      return "max-md:w-[78%] max-md:ms-auto";
-    default:
-      return "max-md:w-[78%] max-md:me-auto";
-  }
-}
-
-function composeBands(items: readonly GalleryItem[]): Plate[][] {
-  const bands: Plate[][] = [];
-  let cursor = 0;
-  let solos = 0;
-  let pairs = 0;
-  let wantSolo = true;
-
-  while (cursor < items.length) {
-    // A pair needs two images; with one left the band is a solo whatever the
-    // cycle wanted, so the sequence never ends on a half-empty row.
-    if (wantSolo || items.length - cursor === 1) {
-      const shapes = SOLO[isTall(items[cursor].image.ratio) ? "tall" : "wide"];
-      const placement = shapes[solos++ % shapes.length];
-      bands.push([{ item: items[cursor], index: cursor, ...placement }]);
-      cursor += 1;
-    } else {
-      const [first, second] = PAIRS[pairs++ % PAIRS.length];
-      bands.push([
-        { item: items[cursor], index: cursor, ...first },
-        { item: items[cursor + 1], index: cursor + 1, ...second },
-      ]);
-      cursor += 2;
-    }
-    wantSolo = !wantSolo;
-  }
-
-  return bands;
-}
+const PLATE_CLASS = "col-span-4 md:col-span-4 lg:col-span-6";
+const PLATE_SIZES = "(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 46vw";
 
 export function GalleryPlates({ items }: { items: GalleryItem[] }) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
-  const bands = composeBands(items);
 
   return (
     <>
-      {bands.map((band, bandIndex) => (
-        <div
-          key={band[0].item.id}
-          className="grid-editorial items-start"
-          style={{ marginBlockStart: bandIndex === 0 ? undefined : "var(--section-y-tight)" }}
-        >
-          {band.map((plate) => (
-            <Reveal
-              key={plate.item.id}
-              delay={(plate.index % 2) * 110}
-              // The md span lives in the placement, not here: two `md:col-span-*`
-              // classes on one element are resolved by stylesheet order rather
-              // than by the order they are written, so the winner is not the one
-              // you meant.
-              className={cn("col-span-4", plate.cls, mobileShape(plate.index))}
-            >
-              {/* Plate number, the way a catalogue numbers its images. Decorative
-                  — the figure below carries the title and the caption — so it is
-                  kept out of the accessibility tree rather than read aloud as a
-                  stray number before every picture. */}
-              <p className="t-meta mb-3" aria-hidden="true">
-                {toFa(String(plate.index + 1).padStart(2, "0"))}
-              </p>
-              <GalleryTile
-                item={plate.item}
-                sizes={plate.sizes}
-                onOpen={() => setOpenIndex(plate.index)}
-              />
-            </Reveal>
-          ))}
-        </div>
-      ))}
+      {/* The grid's own row-gap is sized for text blocks. Plates need the
+          section rhythm between rows, which is what the bands used to carry in
+          a margin between them. */}
+      <div
+        className="grid-editorial items-start"
+        style={{ rowGap: "var(--section-y-tight)" }}
+      >
+        {items.map((item, index) => (
+          <Reveal key={item.id} delay={(index % 2) * 110} className={PLATE_CLASS}>
+            {/* Plate number, the way a catalogue numbers its images. Decorative
+                — the figure below carries the title and the caption — so it is
+                kept out of the accessibility tree rather than read aloud as a
+                stray number before every picture. */}
+            <p className="t-meta mb-3" aria-hidden="true">
+              {toFa(String(index + 1).padStart(2, "0"))}
+            </p>
+            <GalleryTile
+              item={item}
+              sizes={PLATE_SIZES}
+              onOpen={() => setOpenIndex(index)}
+            />
+          </Reveal>
+        ))}
+      </div>
 
       <GalleryLightbox
         items={items}
