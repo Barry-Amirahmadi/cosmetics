@@ -16,31 +16,37 @@ import { cn } from "@/lib/cn";
  * Grid placement per layout. Column 1 is the RIGHT edge of the page, because
  * the document is RTL and grid lines are flow-relative.
  *
- * The four arrangements exist so the showcase reads as a designed spread
- * rather than one row component repeated five times. Which one a product gets
- * is a content decision — see `layout` in the Product type.
+ * **Every spread but `feature` now uses the same five columns, and the rhythm
+ * is which side the image takes.** The spans used to differ too — seven
+ * columns for `wide`, four for `compact` — and read as the pictures being
+ * mismatched rather than as a composed sequence. A spread alternating right,
+ * left, right, left with one full-width finish is a cadence; four different
+ * widths is not.
  *
- * They also alternate sides: `tall` holds the right, `wide` and `compact` the
- * left, `feature` runs full width. Two adjacent products on the same side make
- * the sequence read as a repeated row no matter how the crops differ.
+ * `lg:row-start-1` on the copy is load-bearing, not tidiness. Grid's sparse
+ * auto-placement never moves its cursor backwards, so a copy block asking for
+ * column 1 after the media has taken columns 8–12 cannot be put beside it and
+ * is pushed into a second implicit row instead — which is what silently
+ * happened to `wide` and `compact`, leaving the image with an empty half beside
+ * it and the copy stranded underneath. Their `self-center` was dead code all
+ * along: the row it was centring in was exactly as tall as the copy itself.
+ * Pinning the row is what lets `self-center` mean anything.
  */
 const arrangements = {
   tall: {
     media: "lg:col-start-1 lg:col-span-5",
-    copy: "lg:col-start-7 lg:col-span-5 lg:self-end lg:pb-10",
+    copy: "lg:col-start-8 lg:col-span-5 lg:row-start-1 lg:self-center",
     sizes: "(max-width: 1024px) 100vw, 40vw",
   },
   wide: {
-    media: "lg:col-start-6 lg:col-span-7 lg:mt-20",
-    copy: "lg:col-start-1 lg:col-span-4 lg:self-center",
-    sizes: "(max-width: 1024px) 100vw, 55vw",
+    media: "lg:col-start-8 lg:col-span-5",
+    copy: "lg:col-start-1 lg:col-span-5 lg:row-start-1 lg:self-center",
+    sizes: "(max-width: 1024px) 100vw, 40vw",
   },
   compact: {
-    // Inset one column from the far edge rather than sitting flush, so it
-    // reads as a smaller object on the page, not a shrunken `wide`.
-    media: "lg:col-start-8 lg:col-span-4 lg:mt-16",
-    copy: "lg:col-start-1 lg:col-span-5 lg:self-center",
-    sizes: "(max-width: 1024px) 100vw, 32vw",
+    media: "lg:col-start-8 lg:col-span-5",
+    copy: "lg:col-start-1 lg:col-span-5 lg:row-start-1 lg:self-center",
+    sizes: "(max-width: 1024px) 100vw, 40vw",
   },
   feature: {
     media: "lg:col-start-1 lg:col-span-12",
