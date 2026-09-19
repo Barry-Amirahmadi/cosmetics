@@ -13,6 +13,18 @@ import { resolveProducts } from "./resolveProducts";
  * and it drives the ambient wash behind the showcase section. All five seed
  * products set it, and `layout`, explicitly; both are optional in the type so
  * a CMS editor can omit them, and resolveProducts() fills the gap.
+ *
+ * **Catalogue images share one ratio — `4/5` — and only the `feature` product
+ * departs from it.** They started at four different ratios, which was read as
+ * the images being mismatched rather than as editorial variety, and the reading
+ * was right: a frame that changes per product means the product changes size
+ * inside it, and nothing anchors the eye. Product photography is shot to a
+ * single standard in practice, so a template that demands four ratios would
+ * force a client to crop one consistent set of photographs four different ways.
+ * Variety belongs to how much of the row a product takes, not to the shape of
+ * its frame. The placeholder files under `public/media/` were normalised onto
+ * one 1000×1250 canvas with one subject geometry to match; each keeps only its
+ * own tone and grain seed.
  */
 export const products: Product[] = [
   {
@@ -61,8 +73,8 @@ export const products: Product[] = [
     tone: "#B9C4BD",
     image: {
       src: "/media/product-rooz.svg",
-      alt: "کرم روز پرنیان در قاب افقی، نور طبیعی از سمت راست",
-      ratio: "4/3",
+      alt: "کرم روز پرنیان، نور طبیعی از سمت راست",
+      ratio: "4/5",
     },
     layout: "wide",
     status: "published",
@@ -113,8 +125,8 @@ export const products: Product[] = [
     tone: "#7FA3A0",
     image: {
       src: "/media/product-aghaz.svg",
-      alt: "پاک‌کنندهٔ آغاز در قاب مربع، پس‌زمینهٔ تیره",
-      ratio: "1/1",
+      alt: "پاک‌کنندهٔ آغاز، پس‌زمینهٔ تیره",
+      ratio: "4/5",
     },
     layout: "compact",
     status: "published",

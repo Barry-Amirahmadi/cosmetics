@@ -72,6 +72,34 @@ const arrangements: Record<ProductLayout, Arrangement> = {
  * than a considered pairing. A fixed pair is the honest treatment when the
  * component cannot know what it will be handed.
  */
+/**
+ * Even halves again, for the catalogue proper.
+ *
+ * The arrangements above still describe the homepage showcase, where one
+ * product fills a spread and varying the frame is the rhythm. On this page the
+ * same variation was doing the opposite: four frames at four widths, four
+ * heights and four aspect ratios read as four pictures gathered from four
+ * places rather than one product line photographed once. Real catalogue
+ * photography is shot to a single standard — one lightbox, one angle, one crop
+ * — so the frame has to be a constant here, and the rhythm has to come from
+ * somewhere that does not touch the subject.
+ *
+ * It comes from the two things left: the vertical offsets are gone, so a pair
+ * sits level and reads as a pair, and the feature product below still breaks
+ * out across all twelve columns. Four equal frames then one wide one is a
+ * cadence; four unequal ones are noise.
+ *
+ * Identical in value to `PAIR_ARRANGEMENT` and deliberately not merged with it:
+ * that one exists because a pair of unknown products cannot be composed, this
+ * one because a catalogue must not be. They answer to different rules and will
+ * not necessarily move together.
+ */
+export const CATALOGUE_ARRANGEMENT: Arrangement = {
+  cell: "col-span-4 md:col-span-4 lg:col-span-6",
+  offset: "",
+  sizes: "(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 46vw",
+};
+
 export const PAIR_ARRANGEMENT: Arrangement = {
   cell: "col-span-4 md:col-span-4 lg:col-span-6",
   offset: "",
@@ -110,7 +138,11 @@ export function CollectionItem({
       {...claimProps}
       className={cn("group-media", placement.cell, placement.offset)}
     >
-      <Reveal delay={(index % 3) * 90}>
+      {/* Two per row now, so the stagger counts in twos. On three it ran
+          right-then-left down the first row and left-then-right down the
+          second, which in an RTL document reads as the reveal changing its
+          mind. */}
+      <Reveal delay={(index % 2) * 90}>
         {/* Hidden from the tab order and the accessibility tree: the product
             name below goes to the same place, and one destination deserves one
             stop. Same rule as the homepage showcase. */}
@@ -119,7 +151,7 @@ export function CollectionItem({
         </Link>
       </Reveal>
 
-      <Reveal delay={(index % 3) * 90 + 90}>
+      <Reveal delay={(index % 2) * 90 + 90}>
         <div className="collection-item__meta">
           <p className="t-meta flex items-center gap-3">
             <ToneSwatch tone={product.tone} />
