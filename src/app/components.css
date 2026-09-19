@@ -116,6 +116,11 @@
 
 /* Contents line under the masthead: the category index at the start edge, the
    total at the end. Wraps to two lines on a phone rather than scrolling. */
+/* The index is the one thing on the collection page that is an object rather
+   than a piece of the page: a standing list you consult, not prose you read
+   through. It was a hairline strip, which made it read as the last line of the
+   masthead above it. It sits on the raised plane now — see the depth note in
+   globals.css — so it separates from the page as the thing it is. */
 .collection-index {
   display: flex;
   flex-wrap: wrap;
@@ -123,8 +128,7 @@
   justify-content: space-between;
   gap: var(--space-2) var(--space-6);
   margin-block-start: var(--section-y-tight);
-  padding-block-start: var(--space-4);
-  border-block-start: 1px solid var(--color-line);
+  padding: var(--space-4) var(--space-6);
 }
 
 .collection-index__list {

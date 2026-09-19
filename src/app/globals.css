@@ -235,6 +235,50 @@
     color: var(--color-chalk);
   }
 
+  /* ---- Depth ------------------------------------------------------------
+     Three planes, not two grounds. The palette always had them — a `-raised`,
+     a base and a `-deep` on each side — but only the base and the deep were
+     ever used, so nothing on the page sat *on* anything: every element lay
+     flat on its section, and the page read as a stack of coloured bands.
+
+     `--color-bone-raised` was defined and referenced exactly zero times before
+     this. The light steps are also narrow by design — bone is 90% lightness
+     and bone-deep 84% — so the separation cannot come from fill alone at this
+     end of the scale. It comes from a hairline and one shallow shadow, which
+     is also what this design already prefers: rules, not cards.
+
+     Measured symptom this fixes: on the gallery band the section ground and
+     the image mat were both `rgb(221,219,210)` — the same colour — so the mat
+     did nothing at all. On dark the two already differed and only want the
+     hairline.
+
+       .plane-raised   an object on the page: panels, standing surfaces
+       (ground)        the page itself
+       .plane-inset    a well cut into the page
+
+     Deliberately no radius: the tokens put radius at 0-2px on purpose. A
+     raised plane here is a sheet of paper on a desk, not a card in a UI kit. */
+
+  .plane-raised {
+    background-color: var(--color-bone-raised);
+    border: 1px solid var(--color-line);
+    box-shadow: var(--shadow-lift);
+  }
+  .on-dark .plane-raised {
+    background-color: var(--color-sormeh-raised);
+    border-color: var(--color-line-dark);
+    /* An ink shadow on a near-black ground is invisible; the hairline is the
+       whole effect on this side. */
+    box-shadow: none;
+  }
+
+  .plane-inset {
+    background-color: var(--color-bone-deep);
+  }
+  .on-dark .plane-inset {
+    background-color: var(--color-sormeh-deep);
+  }
+
   /* ---- Motion ----------------------------------------------------------- */
 
   /* Guarded on [data-js] so that if the script never runs, nothing is hidden.
@@ -260,10 +304,19 @@
        instead of cropping it. */
     width: 100%;
     overflow: hidden;
-    background-color: var(--color-bone-deep);
+    /* The raised plane, not the deep one. An image is an object placed on the
+       page, and the mat is what shows before it loads — a hole in the page is
+       the wrong thing for that moment to look like. It also has to separate
+       from a `light-deep` section, which the old mat could not: they were the
+       same colour. */
+    background-color: var(--color-bone-raised);
+    border: 1px solid var(--color-line);
+    box-shadow: var(--shadow-lift);
   }
   .on-dark .img-frame {
     background-color: var(--color-sormeh-raised);
+    border-color: var(--color-line-dark);
+    box-shadow: none;
   }
 
   .img-shift {

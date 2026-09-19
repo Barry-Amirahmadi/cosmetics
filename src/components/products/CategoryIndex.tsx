@@ -23,7 +23,7 @@ interface CategoryIndexProps {
  */
 export function CategoryIndex({ categories, total }: CategoryIndexProps) {
   return (
-    <div className="collection-index">
+    <div className="collection-index plane-raised">
       <nav aria-label={collection.indexLabel}>
         <ul className="collection-index__list">
           {categories.map((category) => (
