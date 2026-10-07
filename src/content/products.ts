@@ -46,7 +46,7 @@ export const products: Product[] = [
     ],
     tone: "#3E4C6B",
     image: {
-      src: "/media/product-shab.svg",
+      src: "/media/product-shab.jpg",
       alt: "سرم شب پرنیان، در نور کم روی سطحی تیره",
       ratio: "4/5",
     },
@@ -72,7 +72,7 @@ export const products: Product[] = [
     ],
     tone: "#B9C4BD",
     image: {
-      src: "/media/product-rooz.svg",
+      src: "/media/product-rooz.jpg",
       alt: "کرم روز پرنیان، نور طبیعی از سمت راست",
       ratio: "4/5",
     },
@@ -98,7 +98,7 @@ export const products: Product[] = [
     ],
     tone: "#C99A5B",
     image: {
-      src: "/media/product-narm.svg",
+      src: "/media/product-narm.jpg",
       alt: "شیشهٔ روغن صورت نرم، بازتاب نور روی جدارهٔ شیشه",
       ratio: "4/5",
     },
@@ -124,7 +124,7 @@ export const products: Product[] = [
     ],
     tone: "#7FA3A0",
     image: {
-      src: "/media/product-aghaz.svg",
+      src: "/media/product-aghaz.jpg",
       alt: "پاک‌کنندهٔ آغاز، پس‌زمینهٔ تیره",
       ratio: "4/5",
     },
@@ -151,7 +151,7 @@ export const products: Product[] = [
     ],
     tone: "#9D8FA8",
     image: {
-      src: "/media/product-aram.svg",
+      src: "/media/product-aram.jpg",
       alt: "تونیک آرام در قاب عریض، نور نرم و سایهٔ بلند",
       ratio: "8/5",
     },

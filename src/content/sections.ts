@@ -44,12 +44,12 @@ export const hero: HeroContent = {
   secondary: { label: "دربارهٔ پرنیان", href: "/#brand" },
   scrollHint: "پیمایش کنید",
   image: {
-    src: "/media/hero-main.svg",
+    src: "/media/hero-main.jpg",
     alt: "نمای اصلی مجموعهٔ پرنیان در نور طبیعی",
     ratio: "4/5",
   },
   inset: {
-    src: "/media/hero-inset.svg",
+    src: "/media/hero-inset.jpg",
     alt: "نمای نزدیک از بافت یکی از محصولات",
     ratio: "1/1",
   },
@@ -131,7 +131,7 @@ export const brand: BrandContent = {
   heading: "روش کار ما",
   lead: "چهار اصلی که در هر تصمیم، از فرمول تا بسته‌بندی، به آن برمی‌گردیم.",
   image: {
-    src: "/media/values-texture.svg",
+    src: "/media/values-texture.jpg",
     alt: "نمای نزدیک از بافت یکی از محصولات پرنیان",
     ratio: "3/4",
   },
@@ -209,7 +209,7 @@ export const about: AboutContent = {
     "مجموعه‌ای که کوچک می‌ماند یعنی می‌توانیم هر محصول را بشناسیم — و یعنی شما هم می‌توانید. چند نام را می‌شود به خاطر سپرد؛ پنجاه‌تا را نه.",
   ],
   image: {
-    src: "/media/gallery-04.svg",
+    src: "/media/gallery-04.jpg",
     alt: "گوشه‌ای از میز کار پرنیان در نور صبح",
     ratio: "4/3",
   },
