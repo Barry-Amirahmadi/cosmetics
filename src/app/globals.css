@@ -182,6 +182,15 @@
   .on-dark .t-body {
     color: var(--color-chalk-2);
   }
+  /* The closing band's lead is the one paragraph on the site set over a
+     picture. In chalk-2 its contrast against the brightest pixel under it
+     measured as low as 3.71:1 at 390px, where the copy spans the band and
+     reaches the side the scrim leaves thin. In the heading's own ink it
+     measured at least 6.77:1 at every width from 360 to 1920px; the picture
+     keeps its scrim as it was. */
+  #cta .t-lead {
+    color: var(--color-chalk);
+  }
   .on-dark .t-meta,
   .on-dark .t-label {
     color: var(--color-chalk-2);
